@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState, useRef } from 'react';
 import { useGetVideosQuery } from '../../services/video.service';
+import BannerPopup from '../../components/BannerPopup';
 
 const HomePage = () => {
   const { ref: videoRef, inView } = useInView({
@@ -39,8 +40,7 @@ const HomePage = () => {
   const categorylist = categories1?.data?.slice(0, 6) || [];
 
   const {data: products1} = useGetProductsQuery();
-  let productlist = products1?.data;
-  console.log("products1", productlist);
+  let productlist = products1?.data || [];
 
   const handleAddToCart = (product) => {
     addToCart(product, 1);
@@ -54,6 +54,7 @@ const HomePage = () => {
 
   return (
     <div className="bg-gradient-to-b from-pink-50 to-white pt-[64px] md:pt-[72px]">
+      <BannerPopup />
       <Banner />
       
       {/* Categories section */}

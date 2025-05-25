@@ -23,10 +23,14 @@ const OrderList = () => {
     status: selectedStatus,
     sort: sortOrder
   });
+
+
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
   
   // Đảm bảo orders là một mảng
   const orders = useMemo(() => ordersData?.data?.orders || [], [ordersData?.data?.orders]);
+
+  console.log(orders);
   const totalItems = useMemo(() => ordersData?.data?.totalItems || 0, [ordersData?.data?.totalItems]);
   const totalPages = useMemo(() => {
     if (!totalItems || !perPage) return 1;

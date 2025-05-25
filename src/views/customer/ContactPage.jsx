@@ -71,23 +71,29 @@ const ContactPage = () => {
                 <div className="px-6 py-8 bg-pink-600 rounded-lg shadow-lg">
                   <h3 className="text-lg font-medium text-white">Thông tin liên hệ</h3>
                   <dl className="mt-8 space-y-6">
-                    <dt><span className="sr-only">Địa chỉ</span></dt>
+                    <dt><span className="sr-only">Hệ thống cửa hàng</span></dt>
                     <dd className="flex text-base text-pink-50">
                       <svg className="flex-shrink-0 w-6 h-6 text-pink-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <span className="ml-3">
-                        123 Đường ABC, Quận XYZ<br />
-                        TP. Hồ Chí Minh, Việt Nam
+                        <strong>CN1:</strong> 84 Âu Cơ, Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng<br />
+                        <strong>CN3:</strong> 368 Tôn Đản, Hoà An, Cẩm Lệ, Đà Nẵng<br />
+                        <strong>CN4:</strong> DT 602 Hoà Sơn, An Ngãi Đông, Hoà Vang, Đà Nẵng (Sát bên Nhà Thuốc Long Châu)<br />
+                        <strong>CN5:</strong> 865 Nguyễn Lương Bằng
                       </span>
                     </dd>
-                    <dt><span className="sr-only">Số điện thoại</span></dt>
+                    <dt><span className="sr-only">Hotline & CSKH</span></dt>
                     <dd className="flex text-base text-pink-50">
                       <svg className="flex-shrink-0 w-6 h-6 text-pink-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
-                      <span className="ml-3">1900 123 456</span>
+                      <span className="ml-3">
+                        <strong>Hotline:</strong> 0906532932<br />
+                        <strong>CSKH:</strong> 0902741222 (Zalo)<br />
+                        <strong>CSKH:</strong> 0798932932 (Zalo)
+                      </span>
                     </dd>
                     <dt><span className="sr-only">Email</span></dt>
                     <dd className="flex text-base text-pink-50">
@@ -231,18 +237,65 @@ const ContactPage = () => {
         </div>
       </div>
 
-      {/* Map section */}
-      <div className="mt-16">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4241674197276!2d106.69765661533417!3d10.778789792319489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f3a9d8d1bb3%3A0xc4b3b6340de93df6!2zMTIzIMSQxrDhu51uZyBBQkMsIFF14bqtbiBYWVosIFRQLiBIQ00!5e0!3m2!1svi!2s!4v1625647892345!5m2!1svi!2s"
-          width="100%"
-          height="450"
-          style={{ border: 0 }}
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-      </div>
+      {/* Google Maps Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">Vị trí cửa hàng</h2>
+          <div className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.8374988491937!2d108.15699631478386!3d16.073861988876706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314218e6e72e66f5%3A0x46619a0e2d55370a!2zODQgw4J1IEPGoSwgSG_DoCBLaMOhbmggQuG6r2MsIExpw6puIENoaeG7g3UsIMSQw6AgTuG6tW5nLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1647856421012!5m2!1svi!2s"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Vị trí cửa hàng"
+              className="absolute inset-0"
+            />
+          </div>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                name: 'Chi nhánh 1',
+                address: '84 Âu Cơ, Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng',
+                link: 'https://goo.gl/maps/example1'
+              },
+              {
+                name: 'Chi nhánh 3',
+                address: '368 Tôn Đản, Hoà An, Cẩm Lệ, Đà Nẵng',
+                link: 'https://goo.gl/maps/example3'
+              },
+              {
+                name: 'Chi nhánh 4',
+                address: 'DT 602 Hoà Sơn, An Ngãi Đông, Hoà Vang, Đà Nẵng',
+                link: 'https://goo.gl/maps/example4'
+              },
+              {
+                name: 'Chi nhánh 5',
+                address: '865 Nguyễn Lương Bằng',
+                link: 'https://goo.gl/maps/example5'
+              }
+            ].map((branch, index) => (
+              <div key={index} className="bg-pink-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h3 className="text-lg font-semibold text-pink-600 mb-2">{branch.name}</h3>
+                <p className="text-gray-600 mb-4">{branch.address}</p>
+                <a
+                  href={branch.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-pink-600 hover:text-pink-700"
+                >
+                  <span>Xem trên bản đồ</span>
+                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

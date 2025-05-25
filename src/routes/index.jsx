@@ -31,6 +31,7 @@ import ProductList from '../views/admin/products/ProductList';
 import ProductForm from '../views/admin/products/ProductForm';
 import OrderList from '../views/admin/orders/OrderList';
 import SliderList from '../views/admin/sliders/SliderList';
+import BannerList from '../views/admin/banners/BannerList';
 
 const VideoList = lazy(() => import('../views/admin/videos/VideoList'));
 
@@ -97,6 +98,7 @@ const AppRoutes = () => {
               </Suspense>
             } />
             <Route path={ROUTES.ADMIN_SLIDERS} element={<SliderList />} />
+            <Route path={ROUTES.ADMIN_BANNERS} element={<BannerList />} />
           </Route>
         </Route>
         
