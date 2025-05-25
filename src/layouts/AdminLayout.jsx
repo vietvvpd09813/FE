@@ -1,11 +1,61 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
+import { useState, useEffect } from 'react';
 
 const AdminLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Kiểm tra kích thước màn hình khi component mount và khi resize
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // 1024px là breakpoint của lg trong Tailwind
+    };
+    
+    // Kiểm tra lần đầu
+    checkIsMobile();
+    
+    // Lắng nghe sự kiện resize
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  // Set sidebar state dựa trên kích thước màn hình
+  useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
   
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleNavigate = (to) => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+    navigate(to);
+  };
+
+  const getBreadcrumbs = () => {
+    const pathnames = location.pathname.split('/').filter((x) => x);
+    let breadcrumbs = [];
+    let path = '';
+
+    pathnames.forEach((name, index) => {
+      path += `/${name}`;
+      const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
+      breadcrumbs.push({
+        name: formattedName === 'Admin' ? 'Dashboard' : formattedName,
+        path: path,
+        isLast: index === pathnames.length - 1
+      });
+    });
+
+    return breadcrumbs;
   };
 
   const menuItems = [
@@ -47,44 +97,157 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-slate-50">
+      {/* Backdrop for mobile */}
+      {isSidebarOpen && isMobile && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-lg">
+      <div className={`fixed inset-y-0 left-0 z-30 w-72 bg-white transform transition-transform duration-300 ease-in-out shadow-lg ${
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      } ${!isMobile ? 'lg:translate-x-0' : ''}`}>
         <div className="flex flex-col h-full">
-          <div className="flex items-center justify-center h-16 border-b border-gray-200">
-            <Link to={ROUTES.ADMIN_DASHBOARD} className="text-xl font-bold text-gray-800">
-              Admin Panel
+          {/* Logo Section */}
+          <div className="flex items-center justify-between h-16 px-6 border-b border-slate-100 bg-white/80 backdrop-blur-sm">
+            <Link to={ROUTES.ADMIN_DASHBOARD} className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+                <span className="text-lg font-bold text-white">M</span>
+              </div>
+              <span className="text-lg font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                Milk Store
+              </span>
             </Link>
+            {isMobile && (
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 lg:hidden focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
+
+          {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-4">
-            <ul className="space-y-2">
+            <ul className="space-y-1.5">
               {menuItems.map((item, index) => (
                 <li key={index}>
-                  <Link
-                    to={item.to}
-                    className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
-                      isActive(item.to) ? 'bg-pink-50' : ''
+                  <button
+                    onClick={() => handleNavigate(item.to)}
+                    className={`flex w-full items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
+                      isActive(item.to)
+                        ? 'bg-gradient-to-r from-pink-500/10 to-purple-500/10 text-pink-600 font-medium'
+                        : 'text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    <span className={`${isActive(item.to) ? 'text-pink-500' : 'text-gray-500'} group-hover:text-pink-500`}>
+                    <span className={`transition-colors duration-200 ${
+                      isActive(item.to) 
+                        ? 'text-pink-500' 
+                        : 'text-slate-400 group-hover:text-slate-600'
+                    }`}>
                       {item.icon}
                     </span>
-                    <span className={`ml-3 ${isActive(item.to) ? 'text-pink-500 font-medium' : ''} group-hover:text-pink-500`}>
-                      {item.text}
-                    </span>
-                  </Link>
+                    <span className="ml-3">{item.text}</span>
+                    {isActive(item.to) && (
+                      <span className="ml-auto w-1.5 h-5 rounded-full bg-gradient-to-b from-pink-500 to-purple-600" />
+                    )}
+                  </button>
                 </li>
               ))}
             </ul>
           </nav>
+
+          {/* User Section */}
+          <div className="p-4 border-t border-slate-100">
+            <div className="flex items-center space-x-3 px-4 py-3 rounded-xl bg-slate-50">
+              <div className="flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+                  <span className="text-sm font-medium text-white">A</span>
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-slate-900 truncate">
+                  Admin
+                </p>
+                <p className="text-sm text-slate-500 truncate">
+                  admin@milkstore.com
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-x-hidden overflow-y-auto">
-        <div className="container mx-auto p-6">
+      <div className={`flex-1 transition-all duration-300 ${!isMobile ? 'lg:pl-72' : ''}`}>
+        {/* Header */}
+        <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b border-slate-200">
+          <div className="flex items-center justify-between h-16 px-6">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setSidebarOpen(!isSidebarOpen)}
+                className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              
+              {/* Breadcrumbs */}
+              <nav className="hidden md:flex items-center" aria-label="Breadcrumb">
+                <ol className="flex items-center space-x-2">
+                  {getBreadcrumbs().map((breadcrumb, index) => (
+                    <li key={index} className="flex items-center">
+                      {index > 0 && (
+                        <svg className="w-4 h-4 text-slate-400 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                      )}
+                      {!breadcrumb.isLast ? (
+                        <Link to={breadcrumb.path} className="text-sm text-slate-500 hover:text-slate-700">
+                          {breadcrumb.name}
+                        </Link>
+                      ) : (
+                        <span className="text-sm font-medium text-slate-800">{breadcrumb.name}</span>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              {/* Notifications */}
+              <button className="p-2 rounded-lg text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </button>
+
+              {/* Settings */}
+              <button className="p-2 rounded-lg text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="p-6">
+          <div className="max-w-7xl mx-auto">
           <Outlet />
         </div>
+        </main>
       </div>
     </div>
   );

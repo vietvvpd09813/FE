@@ -26,7 +26,10 @@ export const analyticsApi = createApi({
   endpoints: (builder) => ({
     // Lấy tổng quan dashboard
     getDashboardOverview: builder.query({
-      query: () => '/analytics/overview',
+      query: ({ fromDate, toDate, year } = {}) => ({
+        url: '/analytics/overview',
+        params: { fromDate, toDate, year }
+      }),
       providesTags: ['Analytics'],
       transformResponse: (response) => {
         if (!response?.data) return {
@@ -41,9 +44,9 @@ export const analyticsApi = createApi({
 
     // Lấy thống kê đơn hàng theo thời gian
     getOrderStatistics: builder.query({
-      query: (period = '7days') => ({
+      query: ({ fromDate, toDate, year } = {}) => ({
         url: '/analytics/orders/statistics',
-        params: { period }
+        params: { fromDate, toDate, year }
       }),
       providesTags: ['Analytics'],
       transformResponse: (response) => {
@@ -63,7 +66,10 @@ export const analyticsApi = createApi({
 
     // Lấy thống kê trạng thái đơn hàng
     getOrderStatusStatistics: builder.query({
-      query: () => '/analytics/orders/status',
+      query: ({ fromDate, toDate, year } = {}) => ({
+        url: '/analytics/orders/status',
+        params: { fromDate, toDate, year }
+      }),
       providesTags: ['Analytics'],
       transformResponse: (response) => {
         if (!response?.data) return {

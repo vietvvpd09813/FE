@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { formatCurrency } from '../../utils/helpers';
 import { addToCart } from '../../utils/cartStorage';
@@ -8,6 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -55,6 +56,33 @@ const ProductDetailPage = () => {
       }
     }
   }, [product, quantity]);
+
+  const handleBuyNow = useCallback(async () => {
+    if (product) {
+      try {
+        setIsAddingToCart(true);
+        addToCart(product, quantity);
+        toast.success(`Đã thêm ${quantity} sản phẩm "${product.name}" vào giỏ hàng!`, {
+          duration: 1000,
+          position: 'top-center',
+          style: {
+            background: '#10B981',
+            color: '#fff',
+          },
+        });
+        setTimeout(() => {
+          navigate(ROUTES.CART);
+        }, 1000);
+      } catch (error) {
+        toast.error('Có lỗi xảy ra khi thêm vào giỏ hàng', {
+          duration: 2000,
+          position: 'top-center',
+        });
+      } finally {
+        setIsAddingToCart(false);
+      }
+    }
+  }, [product, quantity, navigate]);
 
   const toggleDescription = useCallback(() => {
     setIsExpanded(prev => !prev);
@@ -251,38 +279,41 @@ const ProductDetailPage = () => {
               </div>
               
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-auto">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={handleAddToCart}
                   disabled={isAddingToCart}
-                  className={`flex-1 bg-pink-600 text-white py-3 px-6 rounded-lg hover:bg-pink-700 transition-colors flex items-center justify-center space-x-2 ${isAddingToCart ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className="flex-1 bg-white border-2 border-pink-600 text-pink-600 py-3 px-6 rounded-lg hover:bg-pink-50 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isAddingToCart ? (
-                    <>
+                    <span className="flex items-center justify-center">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-pink-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Đang thêm...
+                    </span>
+                  ) : (
+                    'Thêm vào giỏ'
+                  )}
+                </button>
+                <button
+                  onClick={handleBuyNow}
+                  disabled={isAddingToCart}
+                  className="flex-1 bg-pink-600 text-white py-3 px-6 rounded-lg hover:bg-pink-700 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isAddingToCart ? (
+                    <span className="flex items-center justify-center">
                       <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      <span>Đang thêm...</span>
-                    </>
+                      Đang xử lý...
+                    </span>
                   ) : (
-                    <>
-                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      <span>Thêm vào giỏ hàng</span>
-                    </>
+                    'Mua ngay'
                   )}
                 </button>
-                <Link
-                  to={ROUTES.CART}
-                  className="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2"
-                >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                  <span>Mua ngay</span>
-                </Link>
               </div>
             </div>
           </div>

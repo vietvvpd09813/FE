@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { FaShoppingBag, FaBoxes, FaListAlt, FaMoneyBillWave, FaChartLine, FaUserFriends } from 'react-icons/fa';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+import { ORDER_STATUS } from '../../constants';
 import { 
   useGetDashboardOverviewQuery,
   useGetOrderStatisticsQuery,
@@ -34,25 +35,32 @@ const THEME = {
 };
 
 export default function Dashboard() {
-  const [revenuePeriod, setRevenuePeriod] = useState('7days');
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [filterType, setFilterType] = useState('month'); // 'month' or 'year'
   
-  const { data: overview, isLoading: isLoadingOverview } = useGetDashboardOverviewQuery();
-  const { data: orderStats, isLoading: isLoadingOrderStats } = useGetOrderStatisticsQuery(revenuePeriod);
-  const { data: statusStats, isLoading: isLoadingStatusStats } = useGetOrderStatusStatisticsQuery();
+  // Tạo params dựa trên loại filter
+  const filterParams = useMemo(() => {
+    if (filterType === 'month') {
+      return {
+        fromDate: startDate,
+        toDate: endDate
+      };
+    } else {
+      return { year: selectedYear };
+    }
+  }, [filterType, selectedYear, startDate, endDate]);
+  
+  const { data: overview, isLoading: isLoadingOverview } = useGetDashboardOverviewQuery(filterParams);
+  const { data: orderStats, isLoading: isLoadingOrderStats } = useGetOrderStatisticsQuery(filterParams);
+  const { data: statusStats, isLoading: isLoadingStatusStats } = useGetOrderStatusStatisticsQuery(filterParams);
 
   const formatDate = (dateString) => {
-    if (revenuePeriod === '7days') {
-      return new Date(dateString).toLocaleDateString('vi-VN', {
-        day: '2-digit',
-        month: '2-digit'
-      });
-    } else if (revenuePeriod === '30days' || revenuePeriod === 'currentMonth') {
-      return new Date(dateString).toLocaleDateString('vi-VN', {
-        day: '2-digit',
-        month: '2-digit'
-      });
-    }
-    return dateString;
+    return new Date(dateString).toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit'
+    });
   };
 
   const formatCurrency = (amount) => {
@@ -63,6 +71,25 @@ export default function Dashboard() {
       maximumFractionDigits: 0
     }).format(amount);
   };
+
+  const statusConfig = useMemo(() => ({
+    classes: {
+      [ORDER_STATUS.PENDING]: "bg-yellow-100 text-yellow-800",
+      [ORDER_STATUS.PROCESSING]: "bg-blue-100 text-blue-800",
+      [ORDER_STATUS.SHIPPED]: "bg-indigo-100 text-indigo-800",
+      [ORDER_STATUS.DELIVERED]: "bg-green-100 text-green-800",
+      [ORDER_STATUS.CANCELLED]: "bg-red-100 text-red-800",
+      'completed': "bg-green-100 text-green-800"
+    },
+    names: {
+      [ORDER_STATUS.PENDING]: "Chờ xử lý",
+      [ORDER_STATUS.PROCESSING]: "Đang xử lý",
+      [ORDER_STATUS.SHIPPED]: "Đang giao hàng",
+      [ORDER_STATUS.DELIVERED]: "Đã giao hàng",
+      [ORDER_STATUS.CANCELLED]: "Đã hủy",
+      'completed': "Đã hoàn thành"
+    }
+  }), []);
 
   if (isLoadingOverview || isLoadingOrderStats || isLoadingStatusStats) {
     return (
@@ -75,7 +102,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen">
       <div className="max-w-full">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
           {/* Thống kê chính */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Doanh thu */}
@@ -147,88 +174,214 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Biểu đồ */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {/* Biểu đồ doanh thu */}
-            <div className="bg-white rounded-xl p-6 border border-slate-200">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold text-slate-900">Thống kê đơn hàng</h2>
-                <select
-                  value={revenuePeriod}
-                  onChange={(e) => setRevenuePeriod(e.target.value)}
-                  className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="7days">7 ngày qua</option>
-                  <option value="30days">30 ngày qua</option>
-                  <option value="currentMonth">Tháng này</option>
-                </select>
+          {/* Biểu đồ doanh thu và đơn hàng */}
+          <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-900">Thống kê doanh thu và đơn hàng</h2>
+                  <p className="text-slate-500 mt-1">Biểu đồ thể hiện doanh thu và số lượng đơn hàng theo thời gian</p>
+                </div>
+                {/* Bộ lọc */}
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm font-medium text-slate-700">Loại thống kê:</label>
+                    <select
+                      value={filterType}
+                      onChange={(e) => setFilterType(e.target.value)}
+                      className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="month">Theo khoảng thời gian</option>
+                      <option value="year">Theo năm</option>
+                    </select>
+                  </div>
+
+                  {filterType === 'month' ? (
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium text-slate-700">Từ ngày:</label>
+                        <input
+                          type="date"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <label className="text-sm font-medium text-slate-700">Đến ngày:</label>
+                        <input
+                          type="date"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium text-slate-700">Năm:</label>
+                      <select
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(Number(e.target.value))}
+                        className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        {Array.from({ length: 5 }, (_, i) => {
+                          const year = new Date().getFullYear() - i;
+                          return (
+                            <option key={year} value={year}>{year}</option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="h-80">
+
+              <div className="h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={orderStats?.labels?.map((date, index) => ({
-                    date,
-                    revenue: orderStats?.datasets?.[1]?.data?.[index] || 0
-                  })) || []}>
-                    <defs>
-                      <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={THEME.accent.blue} stopOpacity={0.1}/>
-                        <stop offset="95%" stopColor={THEME.accent.blue} stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
+                  <LineChart
+                    data={orderStats?.labels.map((date, index) => ({
+                      date: formatDate(date),
+                      orders: orderStats.datasets[0].data[index],
+                      revenue: orderStats.datasets[1].data[index],
+                    })) || []}
+                    margin={{ top: 20, right: 120, left: 20, bottom: 20 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" stroke={THEME.border} />
                     <XAxis 
-                      dataKey="date"
+                      dataKey="date" 
                       stroke={THEME.text.secondary}
                       tick={{ fill: THEME.text.secondary }}
-                      tickFormatter={formatDate}
+                      tickMargin={10}
                     />
-                    <YAxis
-                      stroke={THEME.text.secondary}
+                    <YAxis 
+                      yAxisId="left"
+                      stroke={THEME.accent.blue}
                       tick={{ fill: THEME.text.secondary }}
-                      tickFormatter={formatCurrency}
+                      tickMargin={10}
+                      label={{ 
+                        value: 'Số đơn hàng',
+                        angle: -90,
+                        position: 'insideLeft',
+                        style: { fill: THEME.accent.blue },
+                        offset: 0
+                      }}
+                    />
+                    <YAxis 
+                      yAxisId="right" 
+                      orientation="right"
+                      stroke={THEME.accent.green}
+                      tick={{ fill: THEME.text.secondary }}
+                      tickFormatter={(value) => formatCurrency(value)}
+                      tickMargin={35}
+                      width={150}
+                      label={{ 
+                        value: 'Doanh thu',
+                        angle: 90,
+                        position: 'insideRight',
+                        style: { fill: THEME.accent.green },
+                        offset: 20,
+                        dy: -20
+                      }}
                     />
                     <Tooltip
-                      formatter={(value) => formatCurrency(value)}
-                      labelFormatter={(label) => `Ngày: ${formatDate(label)}`}
+                      contentStyle={{
+                        backgroundColor: 'white',
+                        border: 'none',
+                        borderRadius: '0.75rem',
+                        padding: '1rem',
+                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                      }}
+                      formatter={(value, name) => {
+                        if (name === 'Doanh thu') return [formatCurrency(value), name];
+                        return [value + ' đơn', name];
+                      }}
+                      labelFormatter={(label) => `Ngày ${label}`}
+                      wrapperStyle={{ zIndex: 1000 }}
                     />
-                    <Area
+                    <Legend 
+                      verticalAlign="top"
+                      height={36}
+                      wrapperStyle={{
+                        paddingTop: '10px'
+                      }}
+                    />
+                    <Line
+                      yAxisId="left"
+                      type="monotone"
+                      dataKey="orders"
+                      name="Số đơn hàng"
+                      stroke={THEME.accent.blue}
+                      strokeWidth={2}
+                      dot={{ fill: THEME.accent.blue, r: 6 }}
+                      activeDot={{ r: 8 }}
+                    />
+                    <Line
+                      yAxisId="right"
                       type="monotone"
                       dataKey="revenue"
-                      stroke={THEME.accent.blue}
-                      fill="url(#colorRevenue)"
+                      name="Doanh thu"
+                      stroke={THEME.accent.green}
+                      strokeWidth={2}
+                      dot={{ fill: THEME.accent.green, r: 6 }}
+                      activeDot={{ r: 8 }}
                     />
-                  </AreaChart>
+                  </LineChart>
                 </ResponsiveContainer>
               </div>
             </div>
+          </div>
 
-            {/* Biểu đồ trạng thái đơn hàng */}
-            <div className="bg-white rounded-xl p-6 border border-slate-200">
-              <h2 className="text-lg font-semibold text-slate-900 mb-6">Trạng thái đơn hàng</h2>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={statusStats?.datasets[0]?.data.map((value, index) => ({
-                        name: statusStats.labels[index],
-                        value: value
-                      })) || []}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={100}
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {statusStats?.datasets[0]?.backgroundColor.map((color, index) => (
-                        <Cell key={`cell-${index}`} fill={color} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value) => `${value} đơn hàng`} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+          {/* Biểu đồ trạng thái đơn hàng */}
+          <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-slate-900">Trạng thái đơn hàng</h2>
+              <p className="text-slate-500 mt-1">Phân bố trạng thái các đơn hàng</p>
+            </div>
+            <div className="h-[500px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart margin={{ top: 40, right: 80, left: 80, bottom: 40 }}>
+                  <Pie
+                    data={statusStats?.datasets[0]?.data.map((value, index) => ({
+                      name: statusConfig.names[statusStats.labels[index]] || statusStats.labels[index],
+                      value: value
+                    })) || []}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={100}
+                    outerRadius={160}
+                    paddingAngle={8}
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                    labelLine={{ 
+                      stroke: '#64748b', 
+                      strokeWidth: 1, 
+                      strokeDasharray: '3 3',
+                      length: 30
+                    }}
+                  >
+                    {statusStats?.datasets[0]?.backgroundColor.map((color, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={color} 
+                        stroke="#fff"
+                        strokeWidth={2}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => `${value} đơn hàng`}
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: 'none',
+                      borderRadius: '0.75rem',
+                      padding: '1rem',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                      fontSize: '0.875rem'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>

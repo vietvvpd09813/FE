@@ -31,6 +31,7 @@ export const ROUTES = {
   ADMIN_USERS: '/admin/users',
   ADMIN_VIDEOS: '/admin/videos',
   ADMIN_SLIDERS: '/admin/sliders',
+  ADMIN_BANNERS: '/admin/banners',
 };
 
 // Loại sản phẩm

@@ -243,6 +243,25 @@ function AdminLayout() {
                 <span className="ml-3">Sliders</span>
               </Link>
             </li>
+            <li>
+              <Link
+                to={ROUTES.ADMIN_BANNERS}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_BANNERS) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M4 5h16v2H4V5zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/>
+                </svg>
+                <span className="ml-3">Banners</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </aside>

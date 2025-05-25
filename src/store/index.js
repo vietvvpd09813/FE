@@ -12,6 +12,7 @@ import { orderApi } from '../services/order.sevice';
 import { analyticsApi } from '../services/analytics.service';
 import { videoApi } from '../services/video.service';
 import { sliderApi } from '../services/slider.service';
+import { bannerApi } from '../services/banner.service';
 const persistConfig = {
   key: 'root',
   storage,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   [analyticsApi.reducerPath]: analyticsApi.reducer,
   [videoApi.reducerPath]: videoApi.reducer,
   [sliderApi.reducerPath]: sliderApi.reducer,
+  [bannerApi.reducerPath]: bannerApi.reducer,
   auth: authReducer,
 });
 
@@ -46,6 +48,7 @@ export const store = configureStore({
     .concat(analyticsApi.middleware)
     .concat(videoApi.middleware)
     .concat(sliderApi.middleware)
+    .concat(bannerApi.middleware)
 });
 
 export const persistor = persistStore(store);
