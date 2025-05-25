@@ -1,0 +1,260 @@
+import { useState, useEffect } from "react";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser, selectIsAuthenticated, selectIsAdmin, logout } from "../../store/authSlice";
+import { ROUTES } from "../../constants";
+import { useLogoutMutation } from "../../services/api";
+import { handleLogout as handleLogoutUtil } from "../../utils/auth";
+// Màu sắc mới
+const THEME = {
+  primary: '#fdf2f8',    // Pink 50
+  secondary: '#fbcfe8',  // Pink 200
+  accent: '#f472b6',     // Pink 400
+  text: {
+    primary: '#1f2937',  // Gray 800
+    secondary: '#4b5563', // Gray 600
+  },
+  border: '#fce7f3',     // Pink 100
+};
+
+function AdminLayout() {
+  const [logoutMutation, { isLoading }] = useLogoutMutation();
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const currentUser = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isAdmin = useSelector(selectIsAdmin);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log('Admin Layout - Auth State:', {
+      currentUser,
+      isAuthenticated,
+      isAdmin,
+      currentPath: location.pathname
+    });
+
+    if (!isAuthenticated) {
+      console.log('User not authenticated, redirecting to admin login...');
+      navigate(ROUTES.ADMIN);
+      return;
+    }
+
+    if (!isAdmin) {
+      console.log('User is not admin, redirecting to unauthorized...');
+      navigate(ROUTES.UNAUTHORIZED);
+      return;
+    }
+  }, [isAuthenticated, isAdmin, location.pathname]);
+
+  const handleLogout = async () => {
+    await handleLogoutUtil(dispatch, logoutMutation, logout, navigate);
+  };
+
+  const isActive = (path) => {
+    return location.pathname.startsWith(path);
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // If not authenticated or not admin, don't render anything
+  if (!isAuthenticated || !isAdmin) {
+    console.log('Not rendering admin layout - Auth check failed');
+    return null;
+  }
+
+  console.log('Rendering admin layout - Auth check passed');
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 z-50 w-full bg-white border-b border-pink-100">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <button
+                onClick={toggleSidebar}
+                type="button"
+                className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-pink-50 focus:outline-none focus:ring-2 focus:ring-pink-200"
+              >
+                <span className="sr-only">Toggle sidebar</span>
+                <svg
+                  className="w-6 h-6"
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clipRule="evenodd"
+                    fillRule="evenodd"
+                    d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+                  />
+                </svg>
+              </button>
+              <Link to={ROUTES.ADMIN_DASHBOARD} className="flex items-center ml-2 md:mr-24">
+                <img
+                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t1.6435-9/117744897_100982331728588_8953325014233865390_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFNXx53vAR_wU7Z2GRW8dRpVAI8DAWu1X5UAjwMBa7VfrY_Vcw1QQyeE1wq9-eUksBc0loe5kof9BeL2piPEVzo&_nc_ohc=x9ty_Jeo32EQ7kNvwGv90Gt&_nc_oc=Adk4IHzg1624W39ziyDMcdbOllWiCbITrwvkd9WJHDzBuDI-ZVIipCNxsXy7mKqnhcQ&_nc_zt=23&_nc_ht=scontent.fdad1-4.fna&_nc_gid=cNzoXBVYNR7n2tnVK8BEAQ&oh=00_AfLjyWcMx4FLgwtDy2wQFIO62xNmV2A8VUfOpeRIzojsSQ&oe=684FB301"
+                  className="h-10 w-10 rounded-full object-cover mr-3"
+                  alt="Logo"
+                />
+                <span className="self-center text-xl font-semibold text-gray-800 whitespace-nowrap">
+                  Mẹ xíu
+                </span>
+              </Link>
+            </div>
+            <div className="flex items-center">
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 rounded-lg"
+              >
+                Đăng xuất
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed left-0 z-40 w-64 h-screen transition-transform bg-white border-r border-pink-100 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0`}
+        aria-label="Sidebar"
+      >
+        <div className="h-full px-3 py-4 overflow-y-auto bg-white">
+          <div className="h-16"></div> {/* Spacer for navbar */}
+          <ul className="space-y-2 font-medium">
+            <li>
+              <Link
+                to={ROUTES.ADMIN_DASHBOARD}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_DASHBOARD) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 22 21"
+                >
+                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
+                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                </svg>
+                <span className="ml-3">Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={ROUTES.ADMIN_CATEGORIES}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_CATEGORIES) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 18 18"
+                >
+                  <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
+                </svg>
+                <span className="ml-3">Danh mục</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/admin/products"
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive('/admin/products') ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                <span className="ml-3">Sản phẩm</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={ROUTES.ADMIN_ORDERS}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_ORDERS) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M17.721 12.22a1 1 0 0 0-.721-.96l-1.1-.25a1 1 0 0 1-.75-.761L14.9 8.8a1 1 0 0 1 .299-.919l.8-.79a1 1 0 0 0-.358-1.639l-1.1-.25a1 1 0 0 1-.75-.761l-.25-1.099a1 1 0 0 0-1.639-.359l-.79.8a1 1 0 0 1-.92.3l-1.45-.25a1 1 0 0 1-.76-.75l-.25-1.101a1 1 0 0 0-.96-.72 1 1 0 0 0-.96.72l-.25 1.1a1 1 0 0 1-.76.75l-1.45.25a1 1 0 0 1-.92-.3l-.79-.8a1 1 0 0 0-1.639.359l-.25 1.1a1 1 0 0 1-.75.76l-1.1.25a1 1 0 0 0 0 1.92l1.1.25a1 1 0 0 1 .75.761l.149.659a1 1 0 0 1-.299.919l-.8.79a1 1 0 0 0 .358 1.639l1.1.25a1 1 0 0 1 .75.761l.25 1.099a1 1 0 0 0 1.639.359l.79-.8a1 1 0 0 1 .92-.3l1.45.25a1 1 0 0 1 .76.75l.25 1.101a1 1 0 0 0 .96.72 1 1 0 0 0 .96-.72l.25-1.1a1 1 0 0 1 .76-.75l1.45-.25a1 1 0 0 1 .92.3l.79.8a1 1 0 0 0 1.639-.359l.25-1.1a1 1 0 0 1 .75-.76l1.1-.25a1 1 0 0 0 .721-.96z"/>
+                </svg>
+                <span className="ml-3">Đơn hàng</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={ROUTES.ADMIN_VIDEOS}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_VIDEOS) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <span className="ml-3">Videos</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={ROUTES.ADMIN_SLIDERS}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_SLIDERS) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+                </svg>
+                <span className="ml-3">Sliders</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <div className={`p-4 md:ml-64 min-h-screen pt-20 transition-all duration-300 ${
+        !isSidebarOpen ? 'md:ml-0' : ''
+      }`}>
+        <Outlet />
+      </div>
+    </div>
+  );
+}
+
+export default AdminLayout;
