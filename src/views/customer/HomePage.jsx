@@ -3,7 +3,7 @@ import { ROUTES } from '../../constants';
 import { formatCurrency } from '../../utils/helpers';
 import { addToCart } from '../../utils/cartStorage';
 import Banner from '../../components/Banner';
-import { useGetProductsQuery } from '../../services/products.service';
+import { useGetSellingProductsQuery } from '../../services/products.service';
 import { useGetCategoriesQuery } from '../../services/category.service';
 import toast from 'react-hot-toast';
 import { useInView } from 'react-intersection-observer';
@@ -36,21 +36,62 @@ const HomePage = () => {
   };
 
   const {data: categories1} = useGetCategoriesQuery();
-  // Get only the 6 most recent categories
-  const categorylist = categories1?.data?.slice(0, 6) || [];
+  const categorylist = categories1?.data || [];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const sliderRef = useRef(null);
 
-  const {data: products1} = useGetProductsQuery();
-  let productlist = products1?.data || [];
+  const getItemsToShow = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 640) return 2; // Mobile
+      if (window.innerWidth < 768) return 3; // Tablet Small
+      if (window.innerWidth < 1024) return 4; // Tablet Large
+      return 6; // Desktop
+    }
+    return 6;
+  };
+
+  const [itemsToShow, setItemsToShow] = useState(getItemsToShow());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsToShow(getItemsToShow());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const itemWidth = 100 / itemsToShow;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (categorylist.length > 0) {
+        setCurrentIndex((prev) => (prev === categorylist.length - 1 ? 0 : prev + 1));
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [categorylist.length]);
+
+  useEffect(() => {
+    if (currentIndex === categorylist.length) {
+      setTimeout(() => {
+        sliderRef.current.style.transition = 'none';
+        setCurrentIndex(0);
+        setTimeout(() => {
+          sliderRef.current.style.transition = 'transform 500ms ease-in-out';
+        }, 50);
+      }, 500);
+    }
+  }, [currentIndex, categorylist.length]);
+
+  const {data: products} = useGetSellingProductsQuery();
+  const productlist = products?.data || [];
 
   const handleAddToCart = (product) => {
     addToCart(product, 1);
     toast.success(`Đã thêm "${product.name}" vào giỏ hàng!`);
   };
-
-  // Create a sorted copy of the product list
-  const sortedProducts = productlist ? [...productlist].sort((a, b) => 
-    new Date(b.created_at) - new Date(a.created_at)
-  ).slice(0, 8) : [];
 
   return (
     <div className="bg-gradient-to-b from-pink-50 to-white pt-[64px] md:pt-[72px]">
@@ -58,35 +99,79 @@ const HomePage = () => {
       <Banner />
       
       {/* Categories section */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 md:py-16 bg-white overflow-hidden">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 text-pink-600">Danh mục sản phẩm</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-pink-600">Danh mục sản phẩm</h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {categorylist?.map((category) => (
-              <Link 
-                key={category.id}
-                to={`${ROUTES.PRODUCTS}?category=${category.id}`} 
-                className="bg-gradient-to-b from-pink-50 to-white p-6 rounded-2xl shadow-lg text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+          <div className="relative max-w-xs sm:max-w-2xl md:max-w-4xl lg:max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+            <div className="overflow-hidden">
+              <div 
+                ref={sliderRef}
+                className="flex"
+                style={{
+                  transform: `translateX(-${currentIndex * itemWidth}%)`,
+                  transition: 'transform 500ms ease-in-out'
+                }}
               >
-                <div className="w-20 h-20 mx-auto mb-4 relative">
-                  {category.image ? (
-                    <img
-                      src={category.image}
-                      alt={category.name}
-                      className="w-full h-full object-contain rounded-full bg-pink-50 p-2"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-pink-100 rounded-full flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 6h-4V4a1 1 0 00-1-1H9a1 1 0 00-1 1v2H4a1 1 0 00-1 1v3c0 .5.5 1 1 1v8a2 2 0 002 2h12a2 2 0 002-2v-8c.5 0 1-.5 1-1V7a1 1 0 00-1-1zM9 4h6v2H9V4zm10 16H5v-8h14v8z" />
-                      </svg>
+                {[...categorylist, ...categorylist].map((category, index) => (
+                  <Link 
+                    key={`${category.id}-${index}`}
+                    to={`${ROUTES.PRODUCTS}?category=${category.id}`} 
+                    className="flex-shrink-0 px-1 sm:px-2 md:px-3 lg:px-4"
+                    style={{ 
+                      width: `${itemWidth}%`
+                    }}
+                  >
+                    <div className="bg-gradient-to-b from-pink-50 to-white rounded-lg sm:rounded-xl shadow-sm text-center hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 p-2 sm:p-3 md:p-4">
+                      <div className="aspect-square w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-2 sm:mb-3 relative">
+                        {category.image ? (
+                          <img
+                            src={category.image}
+                            alt={category.name}
+                            className="w-full h-full object-contain rounded-full bg-pink-50 p-1.5 sm:p-2"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-pink-100 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 6h-4V4a1 1 0 00-1-1H9a1 1 0 00-1 1v2H4a1 1 0 00-1 1v3c0 .5.5 1 1 1v8a2 2 0 002 2h12a2 2 0 002-2v-8c.5 0 1-.5 1-1V7a1 1 0 00-1-1zM9 4h6v2H9V4zm10 16H5v-8h14v8z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      <h3 className="font-medium text-pink-600 text-xs sm:text-sm md:text-base truncate px-1 sm:px-2">{category.name}</h3>
                     </div>
-                  )}
-                </div>
-                <h3 className="font-medium text-pink-600">{category.name}</h3>
-              </Link>
-            ))}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {categorylist.length > itemsToShow && (
+              <>
+                {/* Navigation Arrows */}
+                <button
+                  className="absolute -left-2 sm:-left-3 md:-left-4 top-1/2 transform -translate-y-1/2 bg-white p-1.5 sm:p-2 md:p-2.5 rounded-full shadow-md sm:shadow-lg hover:bg-pink-50 transition-colors"
+                  onClick={() => {
+                    const newIndex = currentIndex === 0 ? categorylist.length - 1 : currentIndex - 1;
+                    setCurrentIndex(newIndex);
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  className="absolute -right-2 sm:-right-3 md:-right-4 top-1/2 transform -translate-y-1/2 bg-white p-1.5 sm:p-2 md:p-2.5 rounded-full shadow-md sm:shadow-lg hover:bg-pink-50 transition-colors"
+                  onClick={() => {
+                    const newIndex = currentIndex === categorylist.length - 1 ? 0 : currentIndex + 1;
+                    setCurrentIndex(newIndex);
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -94,13 +179,13 @@ const HomePage = () => {
       {/* Products section */}
       <section className="py-16 bg-gradient-to-b from-white to-pink-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center text-pink-600">Sản phẩm bán chạy nhất</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center text-pink-600">Sản phẩm đang bán</h2>
           <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Khám phá 8 sản phẩm mới nhất của chúng tôi
+            Khám phá các sản phẩm đang được bán tại cửa hàng
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {sortedProducts.map((product) => (
+            {productlist.map((product) => (
               <div key={product.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                 <Link to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}>
                   <div className="relative pt-[100%] overflow-hidden">
@@ -108,37 +193,29 @@ const HomePage = () => {
                       src={product.image}
                       alt={product.name}
                       className="absolute top-0 left-0 w-full h-full object-contain p-4 hover:scale-110 transition-transform duration-300"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><rect width="100%" height="100%" fill="%23f3f4f6"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="%236b7280" text-anchor="middle">Hình ảnh không khả dụng</text></svg>';
-                      }}
                     />
                   </div>
                 </Link>
                 
-                <div className="p-6">
-                  <p className="text-pink-400 text-sm mb-2">
-                    {categorylist?.find(cat => cat.id === product.category_id)?.name || 'Chưa phân loại'}
-                  </p>
-                  
-                  <Link to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}>
-                    <h3 className="font-bold text-lg mb-2 hover:text-pink-600 line-clamp-2">{product.name}</h3>
+                <div className="p-4">
+                  <Link 
+                    to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}
+                    className="block text-lg font-semibold text-gray-800 hover:text-pink-600 transition-colors mb-2 line-clamp-2"
+                  >
+                    {product.name}
                   </Link>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
-                  
-                  <div className="flex justify-between items-center mt-4">
-                    <div>
-                      <span className="text-lg font-bold text-pink-600">{formatCurrency(product.price)}</span>
-                    </div>
+                  <div className="flex items-center justify-between mt-4">
+                    <span className="text-xl font-bold text-pink-600">
+                      {formatCurrency(product.price)}
+                    </span>
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600 transition-colors shadow-md hover:shadow-lg flex items-center"
+                      className="flex items-center justify-center w-10 h-10 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-600 transition-colors"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
-                      Thêm
                     </button>
                   </div>
                 </div>

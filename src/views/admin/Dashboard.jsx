@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { FaShoppingBag, FaBoxes, FaListAlt, FaMoneyBillWave, FaChartLine, FaUserFriends } from 'react-icons/fa';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import { ORDER_STATUS } from '../../constants';
@@ -36,9 +36,29 @@ const THEME = {
 
 export default function Dashboard() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
-  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
-  const [filterType, setFilterType] = useState('month'); // 'month' or 'year'
+  const [filterType, setFilterType] = useState('month');
+  
+  // Khởi tạo startDate là ngày đầu tháng hiện tại
+  const [startDate, setStartDate] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+  });
+  
+  // Khởi tạo endDate là ngày cuối tháng hiện tại
+  const [endDate, setEndDate] = useState(() => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+  });
+
+  // Tự động cập nhật khi component mount
+  useEffect(() => {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    
+    setStartDate(firstDay.toISOString().split('T')[0]);
+    setEndDate(lastDay.toISOString().split('T')[0]);
+  }, []);
   
   // Tạo params dựa trên loại filter
   const filterParams = useMemo(() => {

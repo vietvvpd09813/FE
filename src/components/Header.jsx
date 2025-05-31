@@ -165,7 +165,7 @@ const Header = memo(() => {
                     <div 
                       className="absolute top-full left-0 w-56 bg-white rounded-lg shadow-lg py-2 transform-gpu z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
                     >
-                      {PRODUCT_CATEGORIES.map((category) => (
+                      {PRODUCT_CATEGORIES.slice(0, 6).map((category) => (
                         <Link
                           key={category.id}
                           to={`${ROUTES.PRODUCTS}?category=${category.id}`}
@@ -177,6 +177,15 @@ const Header = memo(() => {
                           {category.name}
                         </Link>
                       ))}
+                      <Link
+                        to={ROUTES.PRODUCTS}
+                        className="block px-4 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 border-t border-gray-100 mt-1"
+                        onClick={() => {
+                          window.scrollTo(0, 0);
+                        }}
+                      >
+                        Xem thêm →
+                      </Link>
                     </div>
                   </li>
                   
@@ -294,7 +303,7 @@ const Header = memo(() => {
                   </svg>
                 </button>
                 <div className={`mt-2 space-y-1 ${isCategoryDropdownOpen ? 'block' : 'hidden'}`}>
-                  {PRODUCT_CATEGORIES.map((category) => (
+                  {PRODUCT_CATEGORIES.slice(0, 6).map((category) => (
                     <Link
                       key={category.id}
                       to={`${ROUTES.PRODUCTS}?category=${category.id}`}
@@ -307,6 +316,16 @@ const Header = memo(() => {
                       {category.name}
                     </Link>
                   ))}
+                  <Link
+                    to={ROUTES.PRODUCTS}
+                    className="block pl-4 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 border-t border-gray-100 mt-1"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    Xem thêm →
+                  </Link>
                 </div>
               </div>
               <Link

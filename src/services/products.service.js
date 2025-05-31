@@ -84,6 +84,15 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
+
+    // Lấy sản phẩm đang bán
+    getSellingProducts: builder.query({
+      query: () => ({
+        url: '/products/selling',
+        method: 'GET',
+      }),
+      providesTags: ['Products'],
+    }),
   }),
 });
 
@@ -94,4 +103,5 @@ export const {
   useGetProductsByAdminQuery,
   useDeleteProductMutation,
   useGetProductByIdQuery,
+  useGetSellingProductsQuery,
 } = productsApi;
