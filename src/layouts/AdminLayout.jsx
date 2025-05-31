@@ -1,12 +1,15 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 import { useState, useEffect } from 'react';
+import socketService from '../services/socket.service';
+import NotificationDropdown from '../components/NotificationDropdown';
 
 const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   
   // Kiểm tra kích thước màn hình khi component mount và khi resize
   useEffect(() => {
@@ -28,6 +31,33 @@ const AdminLayout = () => {
   useEffect(() => {
     setSidebarOpen(!isMobile);
   }, [isMobile]);
+
+  // Socket connection và notification handling
+  useEffect(() => {
+    // Kết nối socket
+    socketService.connect();
+
+    // Lắng nghe thông báo mới
+    const handleNotification = (notification) => {
+      setNotifications(prev => [notification, ...prev]);
+      // Phát âm thông báo
+      const audio = new Audio('/notification-sound.mp3');
+      audio.play().catch(error => console.log('Error playing sound:', error));
+    };
+
+    socketService.onNotification(handleNotification);
+
+    // Cleanup khi component unmount
+    return () => {
+      socketService.offNotification(handleNotification);
+      socketService.disconnect();
+    };
+  }, []);
+
+  // Clear notifications
+  const handleClearNotifications = () => {
+    setNotifications([]);
+  };
   
   const isActive = (path) => {
     return location.pathname === path;
@@ -225,11 +255,10 @@ const AdminLayout = () => {
             {/* Actions */}
             <div className="flex items-center gap-3">
               {/* Notifications */}
-              <button className="p-2 rounded-lg text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-              </button>
+              <NotificationDropdown 
+                notifications={notifications}
+                onClose={handleClearNotifications}
+              />
 
               {/* Settings */}
               <button className="p-2 rounded-lg text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
@@ -245,8 +274,8 @@ const AdminLayout = () => {
         {/* Page Content */}
         <main className="p-6">
           <div className="max-w-7xl mx-auto">
-          <Outlet />
-        </div>
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
