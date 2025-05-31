@@ -5,6 +5,8 @@ import { selectCurrentUser, selectIsAuthenticated, selectIsAdmin, logout } from 
 import { ROUTES } from "../../constants";
 import { useLogoutMutation } from "../../services/api";
 import { handleLogout as handleLogoutUtil } from "../../utils/auth";
+import socketService from "../../services/socket.service";
+
 // Màu sắc mới
 const THEME = {
   primary: '#fdf2f8',    // Pink 50
@@ -19,7 +21,7 @@ const THEME = {
 
 function AdminLayout() {
   const [logoutMutation, { isLoading }] = useLogoutMutation();
-
+  const [notifications, setNotifications] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const currentUser = useSelector(selectCurrentUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -27,6 +29,31 @@ function AdminLayout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Socket connection và notification handling
+  useEffect(() => {
+    if (!isAuthenticated || !isAdmin) return;
+
+    // Kết nối socket
+    socketService.connect();
+
+    // Lắng nghe thông báo mới
+    const handleNotification = (notification) => {
+      console.log('New notification received:', notification);
+      setNotifications(prev => [notification, ...prev]);
+      // Phát âm thông báo
+      const audio = new Audio('/notification-sound.mp3');
+      audio.play().catch(error => console.log('Error playing sound:', error));
+    };
+
+    socketService.onNotification(handleNotification);
+
+    // Cleanup khi component unmount
+    return () => {
+      socketService.offNotification(handleNotification);
+      socketService.disconnect();
+    };
+  }, [isAuthenticated, isAdmin]);
 
   useEffect(() => {
     console.log('Admin Layout - Auth State:', {
@@ -59,6 +86,23 @@ function AdminLayout() {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  // Clear notifications
+  const handleClearNotifications = () => {
+    setNotifications([]);
+  };
+
+  // Format time for notifications
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('vi-VN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
   };
 
   // If not authenticated or not admin, don't render anything
@@ -106,7 +150,48 @@ function AdminLayout() {
                 </span>
               </Link>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
+              {/* Notification Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setNotifications([])}
+                  className="relative p-2 text-gray-500 hover:bg-pink-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-200"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  {notifications.length > 0 && (
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-pink-500 rounded-full">
+                      {notifications.length}
+                    </span>
+                  )}
+                </button>
+                {/* Notification Panel */}
+                {notifications.length > 0 && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden border border-pink-100">
+                    <div className="p-3 border-b border-pink-100">
+                      <h3 className="text-sm font-semibold text-gray-800">Thông báo</h3>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.map((notification, index) => (
+                        <div
+                          key={index}
+                          className="p-4 border-b border-pink-50 hover:bg-pink-50 cursor-pointer"
+                          onClick={() => {
+                            navigate(ROUTES.ADMIN_ORDERS);
+                            setNotifications([]);
+                          }}
+                        >
+                          <p className="text-sm text-gray-800">{notification.message}</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {formatTime(notification.order.createdAt)}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 rounded-lg"
