@@ -56,12 +56,6 @@ function AdminLayout() {
   }, [isAuthenticated, isAdmin]);
 
   useEffect(() => {
-    console.log('Admin Layout - Auth State:', {
-      currentUser,
-      isAuthenticated,
-      isAdmin,
-      currentPath: location.pathname
-    });
 
     if (!isAuthenticated) {
       console.log('User not authenticated, redirecting to admin login...');
@@ -107,11 +101,9 @@ function AdminLayout() {
 
   // If not authenticated or not admin, don't render anything
   if (!isAuthenticated || !isAdmin) {
-    console.log('Not rendering admin layout - Auth check failed');
     return null;
   }
 
-  console.log('Rendering admin layout - Auth check passed');
   return (
     <div className="min-h-screen bg-white">
       {/* Navbar */}

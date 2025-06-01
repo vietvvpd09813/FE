@@ -29,24 +29,19 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      console.log('Submitting login with:', formData);
-      
+    try {      
       const response = await login({
         email: formData.email,
         password: formData.password,
         remember: formData.remember
       }).unwrap();
-      
-      console.log('Raw API Response:', response);
-      
+            
       if (!response.data) {
         console.error('Invalid response format:', response);
         throw new Error('Invalid response format');
       }
 
       const { user } = response.data;
-      console.log('Extracted user data:', user);
       
       // Dispatch action to Redux with full user object
       await dispatch(setCredentials({ 
@@ -55,10 +50,7 @@ const LoginPage = () => {
           role: user.role || 'customer' // Ensure role is set
         }
       }));
-      
-      // Log Redux state after dispatch
-      console.log('User role after dispatch:', user?.role);
-      
+            
       // Navigate based on role - Chuyển thẳng tới dashboard
       if (user?.role === 'ROLE_ADMIN') {
         console.log('Redirecting to admin dashboard...');

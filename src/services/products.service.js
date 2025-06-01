@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 // BASE_URL cho API thực
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
 // Hàm để lấy cookie theo tên
 const getCookie = (name) => {

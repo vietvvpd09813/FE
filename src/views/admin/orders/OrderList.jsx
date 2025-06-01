@@ -30,7 +30,6 @@ const OrderList = () => {
   // Đảm bảo orders là một mảng
   const orders = useMemo(() => ordersData?.data?.orders || [], [ordersData?.data?.orders]);
 
-  console.log(orders);
   const totalItems = useMemo(() => ordersData?.data?.totalItems || 0, [ordersData?.data?.totalItems]);
   const totalPages = useMemo(() => {
     if (!totalItems || !perPage) return 1;
@@ -174,7 +173,7 @@ const OrderList = () => {
 
           {/* Search and Filter Section */}
           <div className="mt-4 space-y-4">
-            {/* <form onSubmit={handleSearch} className="flex gap-2">
+            <form onSubmit={handleSearch} className="flex gap-2">
               <input
                 type="text"
                 placeholder="Tìm kiếm đơn hàng..."
@@ -188,7 +187,7 @@ const OrderList = () => {
               >
                 Tìm kiếm
               </button>
-            </form> */}
+            </form>
 
             <div className="flex gap-4">
               <div className="w-48">

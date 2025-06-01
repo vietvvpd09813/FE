@@ -46,8 +46,6 @@ const AppRoutes = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAdmin = useSelector(selectIsAdmin);
   
-  console.log('App Routes - Auth State:', { isAuthenticated, isAdmin });
-
   return (
     <BrowserRouter>
       <Routes>

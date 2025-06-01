@@ -10,7 +10,7 @@ class SocketService {
     if (this.socket && this.isConnected) return;
 
     // Sử dụng URL từ environment variable
-    const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    const socketUrl = import.meta.env.REACT_APP_API_URL || 'http://localhost:8000';
 
     this.socket = io(socketUrl, {
       withCredentials: true, // Cho phép gửi cookies
