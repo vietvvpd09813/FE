@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
 // Tạo API với RTK Query
 export const categoryApi = createApi({
@@ -35,7 +35,6 @@ export const categoryApi = createApi({
     // Tạo danh mục mới với hình ảnh
     createCategory: builder.mutation({
       query: (data) => {
-        console.log("data api", data);
         const formData = new FormData();
         // Nếu có file hình ảnh, thêm vào formData
         if (data.image instanceof File) {

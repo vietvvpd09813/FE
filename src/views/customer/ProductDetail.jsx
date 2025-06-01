@@ -5,7 +5,6 @@ import { useGetProductByIdQuery } from '../../services/products.service';
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
 const [detail] =  useGetProductByIdQuery();
-console.log(1)
   const handleAddToCart = () => {
     // Implementation of adding to cart
   };

@@ -22,33 +22,21 @@ const ProductsPage = () => {
     category_id: category
   });
 
-  // Debug logs
-  console.log('API Response:', productsData);
-  console.log('Loading:', isLoading);
-  console.log('Error:', error);
-
   const { data: categories } = useGetCategoriesQuery();
   const categoryList = categories?.data || [];
 
   // Memoize products list
   const products = useMemo(() => {
     if (!productsData?.data?.products) return [];
-    console.log('Products from API:', productsData.data.products);
     return productsData.data.products;
   }, [productsData]);
 
-  // Debug log for final products
-  console.log('Final products array:', products);
 
   // Memoize total pages
   const totalPages = useMemo(() => {
     if (!productsData?.data?.totalPages) return 1;
     return productsData.data.totalPages;
   }, [productsData]);
-
-  // Debug log for pagination
-  console.log('Current page:', page);
-  console.log('Total pages:', totalPages);
 
   const handleAddToCart = useCallback((product) => {
     addToCart(product, 1);

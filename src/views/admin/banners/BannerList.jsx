@@ -23,7 +23,6 @@ const BannerList = () => {
 
   // RTK Query hooks
   const { data: bannerResponse, isLoading } = useGetBannersByAdminQuery();
-  console.log(bannerResponse);
   const [createBanner] = useCreateBannerMutation();
   const [updateBanner] = useUpdateBannerMutation();
   const [deleteBanner] = useDeleteBannerMutation();
