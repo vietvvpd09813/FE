@@ -90,10 +90,10 @@ const ProductDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12">
         <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center h-96">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-300 border-t-pink-600"></div>
+          <div className="flex justify-center items-center h-60 sm:h-80">
+            <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-4 border-pink-300 border-t-pink-600"></div>
           </div>
         </div>
       </div>
@@ -102,7 +102,7 @@ const ProductDetailPage = () => {
   
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
             <div className="flex">
@@ -123,7 +123,7 @@ const ProductDetailPage = () => {
   
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12">
         <div className="container mx-auto px-4">
           <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg">
             <div className="flex">
@@ -148,32 +148,32 @@ const ProductDetailPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Toaster />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 sm:py-6 md:py-8">
         {/* Breadcrumbs */}
-        <nav className="flex items-center space-x-2 text-sm mb-8">
-          <Link to={ROUTES.HOME} className="text-gray-600 hover:text-pink-600 transition-colors">
+        <nav className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm mb-4 sm:mb-6 md:mb-8 overflow-x-auto whitespace-nowrap">
+          <Link to={ROUTES.HOME} className="text-gray-600 hover:text-pink-600 transition-colors flex-shrink-0">
             Trang chủ
           </Link>
-          <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
           </svg>
-          <Link to={ROUTES.PRODUCTS} className="text-gray-600 hover:text-pink-600 transition-colors">
+          <Link to={ROUTES.PRODUCTS} className="text-gray-600 hover:text-pink-600 transition-colors flex-shrink-0">
             Sản phẩm
           </Link>
-          <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
           </svg>
-          <span className="text-gray-800 font-medium">{product.name}</span>
+          <span className="text-gray-800 font-medium truncate flex-shrink-0">{product.name}</span>
         </nav>
         
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-            {/* Product Image - Fixed height container */}
-            <div className="relative h-[500px] overflow-hidden rounded-lg ">
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+            {/* Product Image */}
+            <div className="relative h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden rounded-lg p-4 sm:p-6">
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-full object-contain p-4 hover:scale-110 transition-transform duration-300"
+                className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><rect width="100%" height="100%" fill="%23f3f4f6"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="%236b7280" text-anchor="middle">Hình ảnh không khả dụng</text></svg>';
@@ -181,29 +181,27 @@ const ProductDetailPage = () => {
               />
             </div>
             
-            {/* Product Info - Scrollable container if needed */}
-            <div className="flex flex-col">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+            {/* Product Info */}
+            <div className="flex flex-col p-4 sm:p-6 lg:p-8">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">{product.name}</h1>
               
-              <div className="flex items-baseline mb-6">
-                <div className="flex items-end">
-                  <span className="text-3xl font-bold text-pink-600">
-                    {formatCurrency(product.price)}
-                  </span>
-                </div>
+              <div className="flex items-baseline mb-4 sm:mb-6">
+                <span className="text-2xl sm:text-3xl font-bold text-pink-600">
+                  {formatCurrency(product.price)}
+                </span>
               </div>
               
               {product.description && (
-                <div className="prose prose-pink mb-8">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-2">Mô tả sản phẩm</h2>
+                <div className="prose prose-sm sm:prose prose-pink mb-6">
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Mô tả sản phẩm</h2>
                   <div className="relative">
-                    <p className={`text-gray-600 leading-relaxed ${!isExpanded ? 'line-clamp-3' : ''}`}>
+                    <p className={`text-sm sm:text-base text-gray-600 leading-relaxed ${!isExpanded ? 'line-clamp-3' : ''}`}>
                       {product.description}
                     </p>
                     {product.description.length > 150 && (
                       <button
                         onClick={toggleDescription}
-                        className="text-pink-600 hover:text-pink-700 font-medium mt-2 flex items-center"
+                        className="text-pink-600 hover:text-pink-700 font-medium mt-2 flex items-center text-sm"
                       >
                         {isExpanded ? 'Thu gọn' : 'Xem thêm'}
                         <svg
@@ -221,23 +219,23 @@ const ProductDetailPage = () => {
               )}
               
               {/* Product Features */}
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Đặc điểm nổi bật</h2>
-                <ul className="space-y-3">
-                  <li className="flex items-center text-gray-600">
-                    <svg className="h-5 w-5 text-pink-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="mb-6">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Đặc điểm nổi bật</h2>
+                <ul className="space-y-2 sm:space-y-3">
+                  <li className="flex items-center text-sm sm:text-base text-gray-600">
+                    <svg className="h-4 w-4 sm:h-5 sm:w-5 text-pink-500 mr-2 sm:mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Sản phẩm chính hãng 100%
                   </li>
-                  <li className="flex items-center text-gray-600">
-                    <svg className="h-5 w-5 text-pink-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <li className="flex items-center text-sm sm:text-base text-gray-600">
+                    <svg className="h-4 w-4 sm:h-5 sm:w-5 text-pink-500 mr-2 sm:mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Giao hàng toàn quốc
                   </li>
-                  <li className="flex items-center text-gray-600">
-                    <svg className="h-5 w-5 text-pink-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <li className="flex items-center text-sm sm:text-base text-gray-600">
+                    <svg className="h-4 w-4 sm:h-5 sm:w-5 text-pink-500 mr-2 sm:mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                     Đổi trả trong 7 ngày
@@ -246,16 +244,17 @@ const ProductDetailPage = () => {
               </div>
               
               {/* Quantity Selector */}
-              <div className="mb-8">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Số lượng</h2>
+              <div className="mb-6">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Số lượng</h2>
                 <div className="flex items-center space-x-4">
-                  <div className="flex items-center">
+                  <div className="flex items-center bg-gray-50 rounded-lg">
                     <button
                       onClick={decreaseQuantity}
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 h-10 w-10 rounded-l-lg flex items-center justify-center transition-colors"
+                      disabled={quantity <= 1 || isAddingToCart}
+                      className="p-2 text-gray-600 hover:text-pink-600 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
                     >
-                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4" />
                       </svg>
                     </button>
                     <input
@@ -263,101 +262,40 @@ const ProductDetailPage = () => {
                       min="1"
                       value={quantity}
                       onChange={handleQuantityChange}
-                      className="h-10 w-20 text-center border-y border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      disabled={isAddingToCart}
+                      className="w-12 text-center bg-transparent border-none focus:outline-none focus:ring-0 text-gray-900 text-sm"
                     />
                     <button
                       onClick={increaseQuantity}
-                      className="bg-gray-100 text-gray-600 hover:bg-gray-200 h-10 w-10 rounded-r-lg flex items-center justify-center transition-colors"
+                      disabled={isAddingToCart}
+                      className="p-2 text-gray-600 hover:text-pink-600 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
                     >
-                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                       </svg>
                     </button>
                   </div>
-                  <span className="text-sm text-gray-500">Còn hàng</span>
                 </div>
               </div>
               
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={handleAddToCart}
                   disabled={isAddingToCart}
-                  className="flex-1 bg-white border-2 border-pink-600 text-pink-600 py-3 px-6 rounded-lg hover:bg-pink-50 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-pink-100 text-pink-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-colors disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
-                  {isAddingToCart ? (
-                    <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-pink-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Đang thêm...
-                    </span>
-                  ) : (
-                    'Thêm vào giỏ'
-                  )}
+                  Thêm vào giỏ
                 </button>
                 <button
                   onClick={handleBuyNow}
                   disabled={isAddingToCart}
-                  className="flex-1 bg-pink-600 text-white py-3 px-6 rounded-lg hover:bg-pink-700 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-pink-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-colors disabled:bg-pink-400 disabled:cursor-not-allowed"
                 >
-                  {isAddingToCart ? (
-                    <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Đang xử lý...
-                    </span>
-                  ) : (
-                    'Mua ngay'
-                  )}
+                  Mua ngay
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Additional Information */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Shipping Info */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center mb-4">
-              <div className="h-12 w-12 bg-pink-100 rounded-full flex items-center justify-center">
-                <svg className="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
-              </div>
-              <h3 className="ml-4 text-lg font-semibold text-gray-900">Miễn phí vận chuyển</h3>
-            </div>
-            <p className="text-gray-600">Miễn phí vận chuyển cho đơn hàng từ 500.000đ</p>
-          </div>
-          
-          {/* Return Policy */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center mb-4">
-              <div className="h-12 w-12 bg-pink-100 rounded-full flex items-center justify-center">
-                <svg className="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
-                </svg>
-              </div>
-              <h3 className="ml-4 text-lg font-semibold text-gray-900">Đổi trả dễ dàng</h3>
-            </div>
-            <p className="text-gray-600">Đổi trả sản phẩm trong 7 ngày nếu không hài lòng</p>
-          </div>
-          
-          {/* Customer Support */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center mb-4">
-              <div className="h-12 w-12 bg-pink-100 rounded-full flex items-center justify-center">
-                <svg className="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <h3 className="ml-4 text-lg font-semibold text-gray-900">Hỗ trợ 24/7</h3>
-            </div>
-            <p className="text-gray-600">Đội ngũ tư vấn viên luôn sẵn sàng hỗ trợ bạn</p>
           </div>
         </div>
       </div>

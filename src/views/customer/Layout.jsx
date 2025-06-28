@@ -1,11 +1,13 @@
 import { Outlet } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import BottomNavigation from '../../components/BottomNavigation';
 import { Toaster } from 'react-hot-toast';
+import '../../styles/mobile.css';
 
 const CustomerLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen safe-area-padding">
       <Toaster 
         position="top-center"
         toastOptions={{
@@ -25,10 +27,12 @@ const CustomerLayout = () => {
         }}
       />
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow pt-16 lg:pt-20">
+        <div className="pull-to-refresh-space lg:hidden" />
         <Outlet />
       </main>
-      <Footer />
+      <Footer className="hidden lg:block" />
+      <BottomNavigation />
     </div>
   );
 };
