@@ -42,9 +42,9 @@ const HomePage = () => {
 
   const getItemsToShow = () => {
     if (typeof window !== 'undefined') {
-      if (window.innerWidth < 640) return 2; // Mobile
-      if (window.innerWidth < 768) return 3; // Tablet Small
-      if (window.innerWidth < 1024) return 4; // Tablet Large
+      if (window.innerWidth < 640) return 3; // Mobile
+      if (window.innerWidth < 768) return 4; // Tablet Small
+      if (window.innerWidth < 1024) return 5; // Tablet Large
       return 6; // Desktop
     }
     return 6;
@@ -122,23 +122,23 @@ const HomePage = () => {
                       width: `${itemWidth}%`
                     }}
                   >
-                    <div className="bg-gradient-to-b from-pink-50 to-white rounded-lg sm:rounded-xl shadow-sm text-center hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 p-2 sm:p-3 md:p-4">
-                      <div className="aspect-square w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-2 sm:mb-3 relative">
+                    <div className="bg-gradient-to-b from-pink-50 to-white rounded-lg sm:rounded-xl shadow-sm text-center hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 p-1.5 sm:p-3 md:p-4">
+                      <div className="aspect-square w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 mx-auto mb-1.5 sm:mb-3 relative">
                         {category.image ? (
                           <img
                             src={category.image}
                             alt={category.name}
-                            className="w-full h-full object-contain rounded-full bg-pink-50 p-1.5 sm:p-2"
+                            className="w-full h-full object-contain rounded-full bg-pink-50 p-1 sm:p-2"
                           />
                         ) : (
                           <div className="w-full h-full bg-pink-100 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-7 sm:w-7 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 6h-4V4a1 1 0 00-1-1H9a1 1 0 00-1 1v2H4a1 1 0 00-1 1v3c0 .5.5 1 1 1v8a2 2 0 002 2h12a2 2 0 002-2v-8c.5 0 1-.5 1-1V7a1 1 0 00-1-1zM9 4h6v2H9V4zm10 16H5v-8h14v8z" />
                             </svg>
                           </div>
                         )}
                       </div>
-                      <h3 className="font-medium text-pink-600 text-xs sm:text-sm md:text-base truncate px-1 sm:px-2">{category.name}</h3>
+                      <h3 className="font-medium text-pink-600 text-[11px] sm:text-sm md:text-base truncate px-0.5 sm:px-2">{category.name}</h3>
                     </div>
                   </Link>
                 ))}
@@ -177,43 +177,43 @@ const HomePage = () => {
       </section>
       
       {/* Products section */}
-      <section className="py-16 bg-gradient-to-b from-white to-pink-50">
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-white to-pink-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center text-pink-600">Sản phẩm đang bán</h2>
-          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-center text-pink-600">Sản phẩm đang bán</h2>
+          <p className="text-gray-600 text-center mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto text-sm sm:text-base">
             Khám phá các sản phẩm đang được bán tại cửa hàng
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {productlist.map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <div key={product.id} className="bg-white rounded-xl sm:rounded-2xl shadow overflow-hidden hover:shadow-md transition-all duration-300">
                 <Link to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}>
                   <div className="relative pt-[100%] overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="absolute top-0 left-0 w-full h-full object-contain p-4 hover:scale-110 transition-transform duration-300"
+                      className="absolute top-0 left-0 w-full h-full object-contain p-2 sm:p-4 hover:scale-110 transition-transform duration-300"
                     />
                   </div>
                 </Link>
                 
-                <div className="p-4">
+                <div className="p-2 sm:p-3 md:p-4">
                   <Link 
                     to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}
-                    className="block text-lg font-semibold text-gray-800 hover:text-pink-600 transition-colors mb-2 line-clamp-2"
+                    className="block text-sm sm:text-base font-medium sm:font-semibold text-gray-800 hover:text-pink-600 transition-colors mb-2 line-clamp-2"
                   >
                     {product.name}
                   </Link>
                   
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-xl font-bold text-pink-600">
+                  <div className="flex items-center justify-between mt-2 sm:mt-4">
+                    <span className="text-base sm:text-lg md:text-xl font-bold text-pink-600">
                       {formatCurrency(product.price)}
                     </span>
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="flex items-center justify-center w-10 h-10 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-600 transition-colors"
+                      className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-pink-100 hover:bg-pink-200 text-pink-600 transition-colors"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                       </svg>
                     </button>
@@ -226,120 +226,122 @@ const HomePage = () => {
       </section>
       
       {/* Why choose us section */}
-      <section className="py-16 bg-white">
+      <section className="py-8 sm:py-12 md:py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-12 text-center text-pink-600">Tại sao chọn chúng tôi?</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 text-center text-pink-600">Tại sao chọn chúng tôi?</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-b from-pink-50 to-white p-8 rounded-2xl shadow-lg text-center transform hover:-translate-y-1 transition-all duration-300">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <div className="bg-gradient-to-b from-pink-50 to-white p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md text-center transform hover:-translate-y-1 transition-all duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold mb-3 text-pink-600">Chất lượng đảm bảo</h3>
-              <p className="text-gray-600">Chúng tôi cam kết cung cấp các sản phẩm sữa chất lượng cao, đạt tiêu chuẩn an toàn thực phẩm.</p>
+              <h3 className="text-sm sm:text-base md:text-lg font-bold mb-2 text-pink-600">Chất lượng đảm bảo</h3>
+              <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">Chúng tôi cam kết cung cấp các sản phẩm sữa chất lượng cao, đạt tiêu chuẩn an toàn thực phẩm.</p>
             </div>
             
-            <div className="bg-gradient-to-b from-pink-50 to-white p-8 rounded-2xl shadow-lg text-center transform hover:-translate-y-1 transition-all duration-300">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-gradient-to-b from-pink-50 to-white p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md text-center transform hover:-translate-y-1 transition-all duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold mb-3 text-pink-600">Giao hàng nhanh chóng</h3>
-              <p className="text-gray-600">Dịch vụ giao hàng nhanh chóng trong ngày giúp bạn tiết kiệm thời gian và luôn có sản phẩm tươi mới.</p>
+              <h3 className="text-sm sm:text-base md:text-lg font-bold mb-2 text-pink-600">Giao hàng nhanh chóng</h3>
+              <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">Dịch vụ giao hàng nhanh chóng, đảm bảo sản phẩm đến tay khách hàng trong thời gian sớm nhất.</p>
             </div>
-            
-            <div className="bg-gradient-to-b from-pink-50 to-white p-8 rounded-2xl shadow-lg text-center transform hover:-translate-y-1 transition-all duration-300">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+
+            <div className="bg-gradient-to-b from-pink-50 to-white p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md text-center transform hover:-translate-y-1 transition-all duration-300 col-span-2 sm:col-span-1">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold mb-3 text-pink-600">Hỗ trợ khách hàng</h3>
-              <p className="text-gray-600">Đội ngũ tư vấn tận tâm, sẵn sàng hỗ trợ bạn 24/7 với mọi thắc mắc về sản phẩm.</p>
+              <h3 className="text-sm sm:text-base md:text-lg font-bold mb-2 text-pink-600">Dịch vụ khách hàng</h3>
+              <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">Đội ngũ nhân viên thân thiện, chuyên nghiệp, luôn sẵn sàng hỗ trợ khách hàng.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-pink-50">
+      {/* Customer Reviews Section */}
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-white to-pink-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center text-pink-600">Đánh giá từ khách hàng</h2>
-          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Khám phá những trải nghiệm thực tế từ khách hàng đã tin tưởng và sử dụng sản phẩm của chúng tôi
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Testimonial 1 */}
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 text-center text-pink-600">
+            Khách hàng nói gì về chúng tôi?
+          </h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {/* Review Card 1 */}
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div>
-                  <h4 className="font-bold text-lg">Nguyễn Thị Hương</h4>
-                  <p className="text-gray-500 text-sm">Khách hàng thân thiết</p>
+                <div className="ml-3">
+                  <h3 className="font-semibold text-sm sm:text-base text-gray-800">Nguyễn Thị Hương</h3>
+                  <div className="flex items-center mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="mb-4 flex">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-gray-600 italic">"Sản phẩm sữa tươi ngon, đóng gói cẩn thận. Dịch vụ giao hàng nhanh chóng và nhân viên rất thân thiện. Tôi rất hài lòng và sẽ tiếp tục ủng hộ!"</p>
+              <p className="text-gray-600 text-sm sm:text-base">
+                "Sản phẩm chất lượng, giao hàng nhanh. Nhân viên tư vấn rất nhiệt tình và chuyên nghiệp. Tôi rất hài lòng!"
+              </p>
             </div>
 
-            {/* Testimonial 2 */}
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            {/* Review Card 2 */}
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div>
-                  <h4 className="font-bold text-lg">Trần Văn Nam</h4>
-                  <p className="text-gray-500 text-sm">Khách hàng mới</p>
+                <div className="ml-3">
+                  <h3 className="font-semibold text-sm sm:text-base text-gray-800">Trần Văn Nam</h3>
+                  <div className="flex items-center mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="mb-4 flex">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-gray-600 italic">"Lần đầu mua hàng nhưng rất ấn tượng với chất lượng sản phẩm. Giá cả hợp lý, đặc biệt là dịch vụ chăm sóc khách hàng rất tốt. Chắc chắn sẽ quay lại!"</p>
+              <p className="text-gray-600 text-sm sm:text-base">
+                "Giá cả hợp lý, sản phẩm đa dạng. Đặc biệt là dịch vụ chăm sóc khách hàng rất tốt. Sẽ ủng hộ shop dài dài!"
+              </p>
             </div>
 
-            {/* Testimonial 3 */}
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            {/* Review Card 3 */}
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div>
-                  <h4 className="font-bold text-lg">Lê Thị Mai</h4>
-                  <p className="text-gray-500 text-sm">Khách hàng VIP</p>
+                <div className="ml-3">
+                  <h3 className="font-semibold text-sm sm:text-base text-gray-800">Lê Thị Minh</h3>
+                  <div className="flex items-center mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="mb-4 flex">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-gray-600 italic">"Đã tin dùng sản phẩm được hơn 2 năm. Chất lượng luôn ổn định, đội ngũ tư vấn nhiệt tình. Các chương trình khuyến mãi hấp dẫn. Rất đáng để trải nghiệm!"</p>
+              <p className="text-gray-600 text-sm sm:text-base">
+                "Shop có nhiều chương trình khuyến mãi hấp dẫn. Sản phẩm luôn tươi mới và đảm bảo chất lượng. Rất tin tưởng!"
+              </p>
             </div>
           </div>
         </div>

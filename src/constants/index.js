@@ -34,16 +34,6 @@ export const ROUTES = {
   ADMIN_BANNERS: '/admin/banners',
 };
 
-// Loại sản phẩm
-export const PRODUCT_CATEGORIES = [
-  { id: 'milk', name: 'Sữa tươi', image: null },
-  { id: 'condensed', name: 'Sữa đặc', image: null },
-  { id: 'yogurt', name: 'Sữa chua', image: null },
-  { id: 'powder', name: 'Sữa bột', image: null },
-  { id: 'drinkable_yogurt', name: 'Sữa chua uống', image: null },
-  { id: 'plant', name: 'Sữa thực vật', image: null },
-];
-
 // Trạng thái đơn hàng
 export const ORDER_STATUS = {
   PENDING: 'pending',

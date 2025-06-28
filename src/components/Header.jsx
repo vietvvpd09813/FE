@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ROUTES, PRODUCT_CATEGORIES, CONTACT_INFO } from '../constants';
+import { ROUTES, CONTACT_INFO } from '../constants';
+import { useGetCategoriesQuery } from '../services/category.service';
 import { getCartFromLocalStorage } from '../utils/localStorage';
 import { FaPhone, FaShoppingCart, FaUser, FaCommentDots } from 'react-icons/fa';
 import { RiCustomerService2Fill } from 'react-icons/ri';
@@ -11,6 +12,15 @@ const Header = memo(() => {
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  const { data: categoriesData, isLoading: categoriesLoading } = useGetCategoriesQuery();
+  console.log("categories", categoriesData);
+  const categories = categoriesData?.data || [];
+  
+  // Debug log để xem cấu trúc của một category
+  if (categories.length > 0) {
+    console.log("First category structure:", categories[0]);
+  }
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -165,7 +175,9 @@ const Header = memo(() => {
                     <div 
                       className="absolute top-full left-0 w-56 bg-white rounded-lg shadow-lg py-2 transform-gpu z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
                     >
-                      {PRODUCT_CATEGORIES.slice(0, 6).map((category) => (
+                      {categoriesLoading ? (
+                        <div className="px-4 py-2 text-sm text-gray-500">Đang tải...</div>
+                      ) : categories.slice(0, 6).map((category) => (
                         <Link
                           key={category.id}
                           to={`${ROUTES.PRODUCTS}?category=${category.id}`}
@@ -303,11 +315,13 @@ const Header = memo(() => {
                   </svg>
                 </button>
                 <div className={`mt-2 space-y-1 ${isCategoryDropdownOpen ? 'block' : 'hidden'}`}>
-                  {PRODUCT_CATEGORIES.slice(0, 6).map((category) => (
+                  {categoriesLoading ? (
+                    <div className="px-4 py-2 text-sm text-gray-500">Đang tải...</div>
+                  ) : categories.slice(0, 6).map((category) => (
                     <Link
                       key={category.id}
                       to={`${ROUTES.PRODUCTS}?category=${category.id}`}
-                      className="block pl-4 py-2 text-sm text-gray-600 hover:bg-pink-50 hover:text-pink-600"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors"
                       onClick={() => {
                         setIsMenuOpen(false);
                         window.scrollTo(0, 0);
@@ -318,7 +332,7 @@ const Header = memo(() => {
                   ))}
                   <Link
                     to={ROUTES.PRODUCTS}
-                    className="block pl-4 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 border-t border-gray-100 mt-1"
+                    className="block px-4 py-2 text-sm font-medium text-pink-600 hover:bg-pink-50 border-t border-gray-100 mt-1"
                     onClick={() => {
                       setIsMenuOpen(false);
                       window.scrollTo(0, 0);
@@ -361,26 +375,12 @@ const Header = memo(() => {
             </nav>
 
             <div className="border-t py-4">
-              <Link
-                to="/tracking"
-                className="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Theo dõi đơn hàng
-              </Link>
-              <Link
-                to="/stores"
-                className="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Hệ thống cửa hàng
-              </Link>
               <a
-                href="tel:1900123456"
+                href={`tel:${CONTACT_INFO.HOTLINE}`}
                 className="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Hotline: 1900 123 456
+                Hotline: {CONTACT_INFO.HOTLINE}
               </a>
             </div>
           </div>
