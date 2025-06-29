@@ -186,7 +186,7 @@ const HomePage = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {productlist.map((product) => (
-              <div key={product.id} className="bg-white rounded-xl sm:rounded-2xl shadow overflow-hidden hover:shadow-md transition-all duration-300">
+              <div key={product.id} className="bg-white rounded-xl sm:rounded-2xl shadow overflow-hidden hover:shadow-md transition-all duration-300 flex flex-col">
                 <Link to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}>
                   <div className="relative pt-[100%] overflow-hidden">
                     <img
@@ -197,15 +197,15 @@ const HomePage = () => {
                   </div>
                 </Link>
                 
-                <div className="p-2 sm:p-3 md:p-4">
+                <div className="p-2 sm:p-3 md:p-4 flex flex-col flex-1">
                   <Link 
                     to={ROUTES.PRODUCT_DETAIL.replace(':id', product.id)}
-                    className="block text-sm sm:text-base font-medium sm:font-semibold text-gray-800 hover:text-pink-600 transition-colors mb-2 line-clamp-2"
+                    className="block text-sm sm:text-base font-medium sm:font-semibold text-gray-800 hover:text-pink-600 transition-colors mb-2 line-clamp-2 min-h-[2.5em] sm:min-h-[3em]"
                   >
                     {product.name}
                   </Link>
                   
-                  <div className="flex items-center justify-between mt-2 sm:mt-4">
+                  <div className="flex items-center justify-between mt-auto">
                     <span className="text-base sm:text-lg md:text-xl font-bold text-pink-600">
                       {formatCurrency(product.price)}
                     </span>
@@ -250,7 +250,7 @@ const HomePage = () => {
               <h3 className="text-sm sm:text-base md:text-lg font-bold mb-2 text-pink-600">Giao hàng nhanh chóng</h3>
               <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">Dịch vụ giao hàng nhanh chóng, đảm bảo sản phẩm đến tay khách hàng trong thời gian sớm nhất.</p>
             </div>
-
+            
             <div className="bg-gradient-to-b from-pink-50 to-white p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md text-center transform hover:-translate-y-1 transition-all duration-300 col-span-2 sm:col-span-1">
               <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -270,7 +270,7 @@ const HomePage = () => {
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 text-center text-pink-600">
             Khách hàng nói gì về chúng tôi?
           </h2>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Review Card 1 */}
             <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
@@ -283,11 +283,11 @@ const HomePage = () => {
                 <div className="ml-3">
                   <h3 className="font-semibold text-sm sm:text-base text-gray-800">Nguyễn Thị Hương</h3>
                   <div className="flex items-center mt-1">
-                    {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                       <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
                   </div>
                 </div>
               </div>
@@ -307,11 +307,11 @@ const HomePage = () => {
                 <div className="ml-3">
                   <h3 className="font-semibold text-sm sm:text-base text-gray-800">Trần Văn Nam</h3>
                   <div className="flex items-center mt-1">
-                    {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                       <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
                   </div>
                 </div>
               </div>
@@ -331,11 +331,11 @@ const HomePage = () => {
                 <div className="ml-3">
                   <h3 className="font-semibold text-sm sm:text-base text-gray-800">Lê Thị Minh</h3>
                   <div className="flex items-center mt-1">
-                    {[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                       <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
                   </div>
                 </div>
               </div>

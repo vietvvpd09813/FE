@@ -27,7 +27,7 @@ const CustomerLayout = () => {
         }}
       />
       <Header />
-      <main className="flex-grow pt-16 lg:pt-20">
+      <main className="flex-grow  ">
         <div className="pull-to-refresh-space lg:hidden" />
         <Outlet />
       </main>
