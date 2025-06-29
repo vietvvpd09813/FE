@@ -15,13 +15,14 @@ import AdminLayout from '../views/admin/Layout';
 import HomePage from '../views/customer/HomePage';
 import ProductsPage from '../views/customer/ProductsPage';
 import ProductDetailPage from '../views/customer/ProductDetailPage';
-import AboutPage from '../views/customer/AboutPage';
 import CartPage from '../views/customer/CartPage';
 import ContactPage from '../views/customer/ContactPage';
 import CheckoutPage from '../views/customer/CheckoutPage';
 import LoginPage from '../views/customer/LoginPage';
 import RegisterPage from '../views/customer/RegisterPage';
 import UnauthorizedPage from '../views/customer/UnauthorizedPage';
+import PostsPage from '../views/customer/PostsPage';
+import PostDetailPage from '../views/customer/PostDetailPage';
 
 // Admin Pages
 import Dashboard from '../views/admin/Dashboard';
@@ -34,6 +35,10 @@ import SliderList from '../views/admin/sliders/SliderList';
 import BannerList from '../views/admin/banners/BannerList';
 
 const VideoList = lazy(() => import('../views/admin/videos/VideoList'));
+const PostList = lazy(() => import('../views/admin/posts/PostList'));
+const PostFormCreate = lazy(() => import('../views/admin/posts/PostFormCreate'));
+const PostFormEdit = lazy(() => import('../views/admin/posts/PostFormEdit'));
+const PostDetail = lazy(() => import('../views/admin/posts/PostDetail'));
 
 // Loading component
 const Loading = () => (
@@ -54,8 +59,9 @@ const AppRoutes = () => {
           <Route index element={<HomePage />} />
           <Route path={ROUTES.PRODUCTS} element={<ProductsPage />} />
           <Route path={ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
-          <Route path={ROUTES.ABOUT} element={<AboutPage />} />
           <Route path={ROUTES.CONTACT} element={<ContactPage />} />
+          <Route path={ROUTES.POSTS} element={<PostsPage />} />
+          <Route path={ROUTES.POST_DETAIL} element={<PostDetailPage />} />
           
           {/* Auth Routes - Redirect if already logged in */}
           <Route path={ROUTES.LOGIN} element={
@@ -93,6 +99,26 @@ const AppRoutes = () => {
             <Route path={ROUTES.ADMIN_VIDEOS} element={
               <Suspense fallback={<Loading />}>
                 <VideoList />
+              </Suspense>
+            } />
+            <Route path={ROUTES.ADMIN_POSTS} element={
+              <Suspense fallback={<Loading />}>
+                <PostList />
+              </Suspense>
+            } />
+            <Route path={ROUTES.ADMIN_POST_ADD} element={
+              <Suspense fallback={<Loading />}>
+                <PostFormCreate />
+              </Suspense>
+            } />
+            <Route path={ROUTES.ADMIN_POST_EDIT} element={
+              <Suspense fallback={<Loading />}>
+                <PostFormEdit />
+              </Suspense>
+            } />
+            <Route path={ROUTES.ADMIN_POST_DETAIL} element={
+              <Suspense fallback={<Loading />}>
+                <PostDetail />
               </Suspense>
             } />
             <Route path={ROUTES.ADMIN_SLIDERS} element={<SliderList />} />

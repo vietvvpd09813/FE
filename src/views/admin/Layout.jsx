@@ -339,6 +339,25 @@ function AdminLayout() {
                 <span className="ml-3">Banners</span>
               </Link>
             </li>
+            <li>
+              <Link
+                to={ROUTES.ADMIN_POSTS}
+                className={`flex items-center p-2 text-gray-800 rounded-lg hover:bg-pink-50 group ${
+                  isActive(ROUTES.ADMIN_POSTS) ? 'bg-pink-50' : ''
+                }`}
+              >
+                <svg
+                  className="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-pink-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                </svg>
+                <span className="ml-3">Bài viết</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </aside>
