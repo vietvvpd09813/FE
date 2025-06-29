@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import BottomNavigation from '../../components/BottomNavigation';
+import ChatBot from '../../components/ChatBot';
 import { Toaster } from 'react-hot-toast';
 import '../../styles/mobile.css';
 
@@ -33,6 +34,7 @@ const CustomerLayout = () => {
       </main>
       <Footer className="hidden lg:block" />
       <BottomNavigation />
+      <ChatBot />
     </div>
   );
 };

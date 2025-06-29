@@ -215,21 +215,18 @@ const Header = memo(() => {
                   </li>
                   <li>
                     <Link
-                      to="/about"
+                      to={ROUTES.POSTS}
                       onClick={() => window.scrollTo(0, 0)}
                       className={`text-gray-700 hover:text-pink-600 transition-colors font-medium relative group ${
                         location.pathname === '/about' ? 'text-pink-600' : ''
                       }`}
                     >
-                      <span>Giới thiệu</span>
-                      <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-pink-600 transform origin-left transition-transform duration-300 ${
-                        location.pathname === '/about' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                      }`}></span>
+                      Bài viết
                     </Link>
                   </li>
                   <li>
                     <Link
-                      to="/contact"
+                      to={ROUTES.CONTACT}
                       onClick={() => window.scrollTo(0, 0)}
                       className={`text-gray-700 hover:text-pink-600 transition-colors font-medium relative group ${
                         location.pathname === '/contact' ? 'text-pink-600' : ''
@@ -390,22 +387,18 @@ const Header = memo(() => {
                 Sản phẩm
               </Link>
               <Link
-                to="/about"
-                className={`block px-4 py-2.5 hover:bg-pink-50 transition-colors ${
-                  location.pathname === '/about' ? 'text-pink-600 bg-pink-50' : 'text-gray-700'
-                }`}
+                to={ROUTES.POSTS}
+                className="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
                 onClick={() => {
                   setIsMenuOpen(false);
                   window.scrollTo(0, 0);
                 }}
               >
-                Giới thiệu
+                Bài viết
               </Link>
               <Link
-                to="/contact"
-                className={`block px-4 py-2.5 hover:bg-pink-50 transition-colors ${
-                  location.pathname === '/contact' ? 'text-pink-600 bg-pink-50' : 'text-gray-700'
-                }`}
+                to={ROUTES.CONTACT}
+                className="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-600"
                 onClick={() => {
                   setIsMenuOpen(false);
                   window.scrollTo(0, 0);

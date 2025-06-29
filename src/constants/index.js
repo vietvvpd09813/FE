@@ -1,6 +1,19 @@
 // API URL
 export const BASE_URL = 'http://localhost:8000/api';
 
+// Trạng thái bài viết
+export const POST_STATUS = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED',
+};
+
+export const POST_STATUS_LABELS = {
+  DRAFT: 'Bản nháp',
+  PUBLISHED: 'Đã xuất bản',
+  ARCHIVED: 'Đã lưu trữ',
+};
+
 // Đường dẫn
 export const ROUTES = {
   // Customer routes
@@ -16,6 +29,8 @@ export const ROUTES = {
   ORDERS: '/orders',
   UNAUTHORIZED: '/unauthorized',
   PROFILE: '/profile',
+  POSTS: '/posts',
+  POST_DETAIL: '/posts/:id',
   
   // Admin routes
   ADMIN: '/admin',
@@ -32,6 +47,10 @@ export const ROUTES = {
   ADMIN_VIDEOS: '/admin/videos',
   ADMIN_SLIDERS: '/admin/sliders',
   ADMIN_BANNERS: '/admin/banners',
+  ADMIN_POSTS: '/admin/posts',
+  ADMIN_POST_ADD: '/admin/posts/add',
+  ADMIN_POST_EDIT: '/admin/posts/edit/:id',
+  ADMIN_POST_DETAIL: '/admin/posts/detail/:id',
 };
 
 // Trạng thái đơn hàng
