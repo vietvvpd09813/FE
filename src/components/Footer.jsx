@@ -23,29 +23,29 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-6">
             <div className="flex items-center gap-3">
-              <img 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKT57puJ1NwlHaibn56A34UFY2OKRTd7TtgQ&s" 
-                alt="Mẹ Xíu Logo" 
+                <img 
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKT57puJ1NwlHaibn56A34UFY2OKRTd7TtgQ&s" 
+                  alt="Mẹ Xíu Logo" 
                 className="w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-md border-2 border-pink-100"
-              />
-              <div>
+                />
+                <div>
                 <h2 className="text-lg sm:text-xl font-bold text-pink-600">{CONTACT_INFO.STORE_NAME}</h2>
                 <p className="text-sm text-gray-500">Chăm sóc dinh dưỡng cho mẹ và bé</p>
+                </div>
               </div>
-            </div>
-            
+              
             {/* Contact Info */}
             <div className="space-y-3">
               <a href={`tel:${CONTACT_INFO.HOTLINE}`} className="flex items-center text-gray-600 hover:text-pink-600 transition-colors">
                 <FaPhone className="w-4 h-4 text-pink-500 mr-2" />
                 <span className="text-sm">Hotline: {CONTACT_INFO.HOTLINE}</span>
               </a>
-              {CONTACT_INFO.CUSTOMER_SERVICE.map((service, index) => (
+                {CONTACT_INFO.CUSTOMER_SERVICE.map((service, index) => (
                 <a key={index} href={`tel:${service.phone}`} className="flex items-center text-gray-600 hover:text-pink-600 transition-colors">
                   <RiCustomerService2Fill className="w-4 h-4 text-pink-500 mr-2" />
                   <span className="text-sm">CSKH: {service.phone} {service.hasZalo && '(Zalo)'}</span>
                 </a>
-              ))}
+                ))}
               <div className="flex items-center text-gray-600">
                 <span className="mr-2 text-lg">✈️</span>
                 <span className="text-sm">Nhận ship COD toàn quốc</span>
@@ -64,7 +64,7 @@ const Footer = () => {
           </div>
 
           {/* Store Locations */}
-          <div className="space-y-4">
+            <div className="space-y-4">
             <h3 className="text-base sm:text-lg font-semibold text-gray-800 pb-2 border-b border-pink-100">Hệ thống cửa hàng</h3>
             <div className="space-y-3">
               {STORE_LOCATIONS.map(location => (
@@ -83,14 +83,14 @@ const Footer = () => {
               {categoriesLoading ? (
                 <div className="text-sm text-gray-500">Đang tải...</div>
               ) : categories.map(category => (
-                <Link
+                  <Link 
                   key={category.id}
-                  to={`${ROUTES.PRODUCTS}?category=${category.id}`}
+                    to={`${ROUTES.PRODUCTS}?category=${category.id}`}
                   className="text-sm text-gray-600 hover:text-pink-600 transition-colors hover:translate-x-1 inline-block"
                   onClick={() => window.scrollTo(0, 0)}
-                >
-                  {category.name}
-                </Link>
+                  >
+                    {category.name}
+                  </Link>
               ))}
             </div>
           </div>
@@ -100,20 +100,20 @@ const Footer = () => {
             <h3 className="text-base sm:text-lg font-semibold text-gray-800 pb-2 border-b border-pink-100">Thông tin</h3>
             <div className="grid grid-cols-2 sm:grid-cols-1 gap-2">
               <Link to={ROUTES.ABOUT} className="text-sm text-gray-600 hover:text-pink-600 transition-colors">
-                Về chúng tôi
-              </Link>
+                  Về chúng tôi
+                </Link>
               <Link to="/privacy-policy" className="text-sm text-gray-600 hover:text-pink-600 transition-colors">
-                Chính sách bảo mật
-              </Link>
+                  Chính sách bảo mật
+                </Link>
               <Link to="/terms" className="text-sm text-gray-600 hover:text-pink-600 transition-colors">
-                Điều khoản dịch vụ
-              </Link>
+                  Điều khoản dịch vụ
+                </Link>
               <Link to="/shipping" className="text-sm text-gray-600 hover:text-pink-600 transition-colors">
-                Chính sách vận chuyển
-              </Link>
+                  Chính sách vận chuyển
+                </Link>
               <Link to="/return-policy" className="text-sm text-gray-600 hover:text-pink-600 transition-colors">
-                Chính sách đổi trả
-              </Link>
+                  Chính sách đổi trả
+                </Link>
             </div>
           </div>
         </div>

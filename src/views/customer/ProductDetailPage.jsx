@@ -187,8 +187,8 @@ const ProductDetailPage = () => {
               
               <div className="flex items-baseline mb-4 sm:mb-6">
                 <span className="text-2xl sm:text-3xl font-bold text-pink-600">
-                  {formatCurrency(product.price)}
-                </span>
+                    {formatCurrency(product.price)}
+                  </span>
               </div>
               
               {product.description && (
