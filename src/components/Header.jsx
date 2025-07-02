@@ -218,10 +218,13 @@ const Header = memo(() => {
                       to={ROUTES.POSTS}
                       onClick={() => window.scrollTo(0, 0)}
                       className={`text-gray-700 hover:text-pink-600 transition-colors font-medium relative group ${
-                        location.pathname === '/about' ? 'text-pink-600' : ''
+                        location.pathname === '/posts' ? 'text-pink-600' : ''
                       }`}
                     >
                       Bài viết
+                      <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-pink-600 transform origin-left transition-transform duration-300 ${
+                        location.pathname === '/posts' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                      }`}></span>
                     </Link>
                   </li>
                   <li>
