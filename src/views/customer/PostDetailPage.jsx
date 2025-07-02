@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 
 const PostDetailPage = () => {
   const { slug } = useParams();
-  console.log(slug);
   const { data, isLoading, error } = useGetPostBySlugQuery(slug);
 
   const post = data?.data;

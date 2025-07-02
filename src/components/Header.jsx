@@ -14,13 +14,7 @@ const Header = memo(() => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const { data: categoriesData, isLoading: categoriesLoading } = useGetCategoriesQuery();
-  console.log("categories", categoriesData);
   const categories = categoriesData?.data || [];
-  
-  // Debug log để xem cấu trúc của một category
-  if (categories.length > 0) {
-    console.log("First category structure:", categories[0]);
-  }
   
   const navigate = useNavigate();
   const location = useLocation();
