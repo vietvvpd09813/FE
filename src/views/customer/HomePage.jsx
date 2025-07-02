@@ -101,7 +101,7 @@ const HomePage = () => {
       {/* Categories section */}
       <section className="py-8 sm:py-12 md:py-16 bg-white overflow-hidden">
         <div className="container mx-auto px-4">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-pink-600">Danh mục sản phẩm</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 sm:mb-8 md:mb-12 text-pink-600">Danh mục sản phẩm</h2>
           
           <div className="relative max-w-xs sm:max-w-2xl md:max-w-4xl lg:max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
             <div className="overflow-hidden">
@@ -179,8 +179,8 @@ const HomePage = () => {
       {/* Products section */}
       <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-b from-white to-pink-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 text-center text-pink-600">Sản phẩm đang bán</h2>
-          <p className="text-gray-600 text-center mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto text-sm sm:text-base">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center text-pink-600">Sản phẩm đang bán</h2>
+          <p className="text-gray-600 text-center mb-6 sm:mb-8 md:mb-12 max-w-2xl mx-auto text-sm sm:text-base md:text-lg">
             Khám phá các sản phẩm đang được bán tại cửa hàng
           </p>
           
@@ -228,7 +228,7 @@ const HomePage = () => {
       {/* Why choose us section */}
       <section className="py-8 sm:py-12 md:py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 text-center text-pink-600">Tại sao chọn chúng tôi?</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 md:mb-10 text-center text-pink-600">Tại sao chọn chúng tôi?</h2>
           
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             <div className="bg-gradient-to-b from-pink-50 to-white p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md text-center transform hover:-translate-y-1 transition-all duration-300">
