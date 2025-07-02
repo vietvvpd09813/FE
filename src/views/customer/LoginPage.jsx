@@ -53,13 +53,11 @@ const LoginPage = () => {
             
       // Navigate based on role - Chuyển thẳng tới dashboard
       if (user?.role === 'ROLE_ADMIN') {
-        console.log('Redirecting to admin dashboard...');
         navigate(ROUTES.ADMIN_DASHBOARD);
         return;
       }
       
       // Nếu không phải admin thì mới chuyển về home
-      console.log('Redirecting to home...');
       navigate(ROUTES.HOME);
       
     } catch (err) {

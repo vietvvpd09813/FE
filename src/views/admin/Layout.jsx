@@ -39,11 +39,10 @@ function AdminLayout() {
 
     // Lắng nghe thông báo mới
     const handleNotification = (notification) => {
-      console.log('New notification received:', notification);
       setNotifications(prev => [notification, ...prev]);
       // Phát âm thông báo
       const audio = new Audio('/notification-sound.mp3');
-      audio.play().catch(error => console.log('Error playing sound:', error));
+      audio.play().catch(error => console.error('Error playing sound:', error));
     };
 
     socketService.onNotification(handleNotification);
@@ -58,13 +57,13 @@ function AdminLayout() {
   useEffect(() => {
 
     if (!isAuthenticated) {
-      console.log('User not authenticated, redirecting to admin login...');
+      console.error('User not authenticated, redirecting to admin login...');
       navigate(ROUTES.ADMIN);
       return;
     }
 
     if (!isAdmin) {
-      console.log('User is not admin, redirecting to unauthorized...');
+      console.error('User is not admin, redirecting to unauthorized...');
       navigate(ROUTES.UNAUTHORIZED);
       return;
     }

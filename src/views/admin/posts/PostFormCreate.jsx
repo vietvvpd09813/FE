@@ -158,7 +158,7 @@ const PostFormCreate = () => {
     <Spin spinning={aiLoading || submitting} size="large" tip="Đang xử lý...">
       <Row justify="center" style={{ width: '100%', margin: 0 }}>
         <Col span={22} style={{ maxWidth: '90vw' }}>
-          <Card title="Tạo bài viết mới" bordered={false} style={{ margin: '32px 0', boxShadow: '0 2px 8px #f0f1f2' }}>
+          <Card title="Tạo bài viết mới" variant="borderless" style={{ margin: '32px 0', boxShadow: '0 2px 8px #f0f1f2' }}>
             {/* PHẦN NHẬP AI, KHÔNG NẰM TRONG FORM */}
             <Card type="inner" title="Tạo nội dung bài viết tự động bằng AI" style={{ marginBottom: 24, background: '#f0f7ff' }}>
               <Row gutter={16}>
