@@ -30,7 +30,7 @@ export const ROUTES = {
   UNAUTHORIZED: '/unauthorized',
   PROFILE: '/profile',
   POSTS: '/posts',
-  POST_DETAIL: '/posts/:id',
+  POST_DETAIL: '/posts/:slug',
   
   // Admin routes
   ADMIN: '/admin',

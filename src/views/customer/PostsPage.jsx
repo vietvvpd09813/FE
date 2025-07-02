@@ -177,7 +177,7 @@ const PostsPage = () => {
                     className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
                   >
                     {/* Post Image */}
-                    <Link to={ROUTES.POST_DETAIL.replace(':id', post.id)}>
+                    <Link to={ROUTES.POST_DETAIL.replace(':slug', post.slug)}>
                       <div className="relative h-48 overflow-hidden">
                         {post.thumbnail ? (
                           <img
@@ -210,7 +210,7 @@ const PostsPage = () => {
                         <span>{post.viewCount || 0} lượt xem</span>
                       </div>
 
-                      <Link to={ROUTES.POST_DETAIL.replace(':id', post.id)}>
+                      <Link to={ROUTES.POST_DETAIL.replace(':slug', post.slug)}>
                         <h3 className="text-xl font-bold text-gray-800 mb-3 hover:text-pink-600 transition-colors line-clamp-2">
                           {post.title}
                         </h3>

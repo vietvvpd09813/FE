@@ -1,12 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
-import { useGetPostByIdQuery } from '../../services/post.service';
+import { useGetPostBySlugQuery } from '../../services/post.service';
 import { ROUTES } from '../../constants';
 import { FaCalendarAlt, FaEye, FaUser, FaArrowLeft, FaShare, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { useEffect } from 'react';
 
 const PostDetailPage = () => {
-  const { id } = useParams();
-  const { data, isLoading, error } = useGetPostByIdQuery(id);
+  const { slug } = useParams();
+  console.log(slug);
+  const { data, isLoading, error } = useGetPostBySlugQuery(slug);
 
   const post = data?.data;
 

@@ -5,6 +5,7 @@ import QuillEditor from '../../../components/common/QuillEditor';
 import { POST_STATUS, POST_STATUS_LABELS } from '../../../constants';
 import { useCreatePostMutation, useGenerateAIContentMutation } from '../../../services/post.service';
 import { useNavigate } from 'react-router-dom';
+import slugify from 'slugify';
 
 const { TextArea } = Input;
 
@@ -18,6 +19,7 @@ const defaultForm = {
   featured: false,
   thumbnail: null,
   images: [],
+  slug: '',
 };
 
 const PostFormCreate = () => {
@@ -26,6 +28,7 @@ const PostFormCreate = () => {
   const [submitting, setSubmitting] = useState(false);
   const [aiInput, setAiInput] = useState({ topic: '', keywords: '', description: '' });
   const [aiLoading, setAiLoading] = useState(false);
+  const [slugEdited, setSlugEdited] = useState(false);
   const navigate = useNavigate();
 
   const [createPost] = useCreatePostMutation();
@@ -47,11 +50,30 @@ const PostFormCreate = () => {
       setForm(prev => ({ ...prev, [name]: checked }));
     } else {
       setForm(prev => ({ ...prev, [name]: value }));
+      if (name === 'title') {
+        setForm(prev => {
+          if (!slugEdited || !prev.slug) {
+            return { ...prev, slug: slugify(value, { lower: true, strict: true }) };
+          }
+          return prev;
+        });
+      }
     }
   };
 
   const handleQuillChange = (value) => {
     setForm(prev => ({ ...prev, content: value }));
+  };
+
+  const handleSlugChange = (e) => {
+    const val = e.target.value;
+    if (!val) {
+      setSlugEdited(false);
+      setForm(prev => ({ ...prev, slug: '' }));
+    } else {
+      setSlugEdited(true);
+      setForm(prev => ({ ...prev, slug: slugify(val, { lower: true, strict: true }) }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -116,7 +138,14 @@ const PostFormCreate = () => {
         metaTitle: json.metaTitle || '',
         metaDescription: json.metaDescription || ''
       };
-      setForm(prevForm => ({ ...prevForm, ...newFormData }));
+      setForm(prevForm => {
+        const updated = { ...prevForm, ...newFormData };
+        // Nếu user chưa sửa slug thủ công thì tự động sinh lại slug từ title mới
+        if (!slugEdited && newFormData.title) {
+          updated.slug = slugify(newFormData.title, { lower: true, strict: true });
+        }
+        return updated;
+      });
       setAiInput({ topic: '', keywords: '', description: '' });
     } catch (err) {
       message.error('Sinh nội dung AI thất bại!');
@@ -179,6 +208,15 @@ const PostFormCreate = () => {
                   minLength={5}
                   maxLength={200}
                   placeholder="Nhập tiêu đề bài viết"
+                  size="large"
+                />
+              </Form.Item>
+              <Form.Item label="Slug (đường dẫn SEO)" required validateStatus={errors.slug ? 'error' : ''} help={errors.slug}>
+                <Input
+                  name="slug"
+                  value={form.slug}
+                  onChange={handleSlugChange}
+                  placeholder="Slug sẽ tự sinh từ tiêu đề, bạn có thể sửa nếu muốn"
                   size="large"
                 />
               </Form.Item>

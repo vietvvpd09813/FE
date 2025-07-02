@@ -131,9 +131,9 @@ function AdminLayout() {
                   />
                 </svg>
               </button>
-              <Link to={ROUTES.ADMIN_DASHBOARD} className="flex items-center ml-2 md:mr-24">
+              <Link to={ROUTES.HOME} className="flex items-center ml-2 md:mr-24">
                 <img
-                  src="https://scontent.fdad1-4.fna.fbcdn.net/v/t1.6435-9/117744897_100982331728588_8953325014233865390_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFNXx53vAR_wU7Z2GRW8dRpVAI8DAWu1X5UAjwMBa7VfrY_Vcw1QQyeE1wq9-eUksBc0loe5kof9BeL2piPEVzo&_nc_ohc=x9ty_Jeo32EQ7kNvwGv90Gt&_nc_oc=Adk4IHzg1624W39ziyDMcdbOllWiCbITrwvkd9WJHDzBuDI-ZVIipCNxsXy7mKqnhcQ&_nc_zt=23&_nc_ht=scontent.fdad1-4.fna&_nc_gid=cNzoXBVYNR7n2tnVK8BEAQ&oh=00_AfLjyWcMx4FLgwtDy2wQFIO62xNmV2A8VUfOpeRIzojsSQ&oe=684FB301"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKT57puJ1NwlHaibn56A34UFY2OKRTd7TtgQ&s"
                   className="h-10 w-10 rounded-full object-cover mr-3"
                   alt="Logo"
                 />
