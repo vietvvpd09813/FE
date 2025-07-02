@@ -113,7 +113,7 @@ const ChatBot = () => {
       {/* Chat Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 ${
+        className={`fixed lg:bottom-6 bottom-24 right-6 z-999 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 ${
           isOpen 
             ? 'bg-red-500 hover:bg-red-600 text-white' 
             : 'bg-pink-500 hover:bg-pink-600 text-white'
@@ -125,13 +125,13 @@ const ChatBot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-80 h-96 bg-white rounded-2xl shadow-2xl border border-pink-100 flex flex-col">
+        <div className="fixed bottom-6 right-6 z-[999] w-80 h-96 bg-white rounded-2xl shadow-2xl border border-pink-100 flex flex-col">
           {/* Header */}
           <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white p-4 rounded-t-2xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                  <FaRobot size={20} />
+                  <img src="/vite.svg" alt="Mẹ Xíu Logo" className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="font-semibold">Mẹ Xíu Assistant</h3>
@@ -164,7 +164,7 @@ const ChatBot = () => {
                   <div className="flex items-start space-x-2">
                     {message.type === 'bot' && (
                       <div className="w-6 h-6 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <FaRobot size={12} className="text-pink-500" />
+                        <img src="/vite.svg" alt="Bot Icon" className="w-4 h-4 text-pink-500" />
                       </div>
                     )}
                     <div className="flex-1">
@@ -198,7 +198,7 @@ const ChatBot = () => {
                 <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md shadow-sm border border-gray-100 px-4 py-2">
                   <div className="flex items-center space-x-2">
                     <div className="w-6 h-6 bg-pink-100 rounded-full flex items-center justify-center">
-                      <FaRobot size={12} className="text-pink-500" />
+                      <img src="/vite.svg" alt="Bot Icon" className="w-4 h-4 text-pink-500" />
                     </div>
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
